@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Data (never commit real data)
+data/
+*.csv
+*.edf
+
+# Python
+__pycache__/
+.venv/
