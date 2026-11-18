@@ -156,3 +156,21 @@ data/
 # Python
 __pycache__/
 .venv/
+# Data formats (never commit real or clinical data)
+*.tsv
+*.xlsx
+*.xls
+*.mat
+*.parquet
+*.npy
+*.npz
+*.h5
+
+# Expo / React Native
+.expo/
+*.jks
+*.keystore
+
+# Python / notebooks
+.ipynb_checkpoints/
+.pytest_cache/
