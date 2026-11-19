@@ -46,6 +46,28 @@ Never put the Supabase `service_role` key in this app.
    ```
    Rebuild with `npm run android` after adding a package with native code or changing `app.json`.
 
+### Windows: long paths in the native build
+
+On Windows the C++ build of some libraries (for example `react-native-reanimated`, installed by
+Expo Router) creates paths longer than 260 characters. The `ninja` shipped with the default
+CMake 3.22.1 cannot handle them and the build fails with
+`ninja: error: mkdir(...): No such file or directory`. One-time fix per computer:
+
+1. Make sure Windows long paths are enabled (`LongPathsEnabled = 1`, Windows 10/11 setting).
+2. Install CMake 3.31.6 (its `ninja` 1.12 supports long paths): Android Studio → SDK Manager →
+   SDK Tools → Show Package Details → CMake 3.31.6.
+3. Point the build at it in `android/local.properties` (create the file if missing; it is
+   machine-specific and ignored by Git), using your own SDK path:
+   ```
+   sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
+   cmake.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk\\cmake\\3.31.6
+   ```
+4. Delete `android/app/.cxx` and `node_modules/*/android/.cxx` if a build already failed, then
+   run `npm run android` again.
+
+Note: `npx expo prebuild --clean` deletes the `android/` folder, including `local.properties`;
+recreate it afterwards.
+
 The app forces a right-to-left layout. On the very first launch of a new build, close and
 reopen the app once so Android applies RTL fully.
 
