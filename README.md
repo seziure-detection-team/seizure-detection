@@ -22,10 +22,10 @@ Setup instructions for each component will be added to its own README when the c
    - `fix/<short-name>` for a bug fix
    - `docs/<short-name>` for documentation
    - `chore/<short-name>` for configuration and maintenance
-2. Open a Pull Request into `dev`. Another team member must review it before it is merged.
+2. Open a Pull Request into `dev` and merge it.
 3. New code must include automated tests that pass (Jest for the mobile app and dashboard, pytest for the backend and ML code).
 4. Delete the branch after it is merged.
-5. `dev` is merged into `main` at the end of each sprint.
+5. After a change is merged into `dev`, open a Pull Request from `dev` into `main`. Another team member reviews and approves it before it is merged into `main`.
 
 ## Security and data rules
 
