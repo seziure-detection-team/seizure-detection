@@ -174,3 +174,13 @@ __pycache__/
 # Python / notebooks
 .ipynb_checkpoints/
 .pytest_cache/
+
+# Python virtual environments
+venv/
+env/
+
+# Editors and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
