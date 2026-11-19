@@ -1,0 +1,27 @@
+{
+  "name": "seizure-detection-mobile",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "expo": "~58.0.26",
+    "expo-localization": "~58.0.5",
+    "expo-status-bar": "~58.0.5",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "test": "jest"
+  },
+  "private": true,
+  "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
+    "jest": "^30.5.2",
+    "jest-expo": "~58.0.15",
+    "test-renderer": "^1.3.1"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  }
+}
