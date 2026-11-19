@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "رصد",
+    "slug": "rasd-mobile",
+    "scheme": "rasd",
+    "version": "1.0.0",
+    "platforms": ["android"],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "sa.edu.uj.rasd",
+      "adaptiveIcon": {
+        "backgroundColor": "#F4F0E9",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F4F0E9",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 120,
+          "resizeMode": "contain"
+        }
+      ],
+      "expo-font",
+      ["expo-localization", { "forcesRTL": true }],
+      "expo-secure-store"
+    ]
+  }
+}
