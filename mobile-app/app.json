@@ -29,8 +29,14 @@
         }
       ],
       "expo-font",
-      ["expo-localization", { "forcesRTL": true }],
-      "expo-secure-store"
+      [
+        "expo-localization",
+        {
+          "forcesRTL": true
+        }
+      ],
+      "expo-secure-store",
+      "expo-asset"
     ]
   }
 }

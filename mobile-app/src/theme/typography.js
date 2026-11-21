@@ -24,20 +24,22 @@ export const fonts = {
   },
 };
 
-// Font sizes in points; final values will be matched to the designs in Phase 2
+// Font sizes in points, estimated from the designs (proportional approximations)
 export const fontSizes = {
-  caption: 12,
-  small: 14,
-  body: 16,
-  title: 20,
-  h1: 26,
+  caption: 13, // hints and helper text under fields
+  small: 14, // links, badges, secondary lines
+  body: 15, // field labels, inputs, body text
+  button: 16,
+  title: 20, // titles of message states (A3, A5)
+  h1: 28, // screen headings (Noto Naskh Arabic)
 };
 
 // Line heights paired with the sizes above (Arabic script needs extra height)
 export const lineHeights = {
-  caption: 18,
+  caption: 20,
   small: 22,
   body: 24,
+  button: 24,
   title: 30,
-  h1: 38,
+  h1: 42,
 };

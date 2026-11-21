@@ -9,6 +9,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { Feather } from '@expo/vector-icons';
 import {
   NotoNaskhArabic_500Medium,
   NotoNaskhArabic_600SemiBold,
@@ -27,8 +28,10 @@ import {
 
 import { colors } from '../src/theme';
 
-// Font files; the keys are the family names used in src/theme/typography.js
+// Font files; the keys are the family names used in src/theme/typography.js.
+// The Feather icon font is preloaded too, so icons do not appear late on first render.
 const fontAssets = {
+  ...Feather.font,
   NotoNaskhArabic_500Medium,
   NotoNaskhArabic_600SemiBold,
   NotoNaskhArabic_700Bold,
