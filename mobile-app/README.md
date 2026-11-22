@@ -29,7 +29,20 @@ EXPO_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=<anon public key>
 ```
 
-Never put the Supabase `service_role` key in this app.
+Never put the Supabase `service_role` key in this app. Restart Metro after changing `.env`.
+
+### Supabase project settings (Dashboard)
+
+The auth flows need these settings (Authentication section of the Supabase Dashboard):
+
+- Email provider: **Confirm email** on; new sign-ups allowed.
+- Password: minimum length **8**, no extra character requirements (the app checks
+  "8+ characters with a letter and a digit").
+- URL Configuration → Redirect URLs: `rasd://login` and `rasd://new-password`.
+- Email templates "Confirm signup" and "Reset password": the default templates
+  (`{{ .ConfirmationURL }}`), which work with the PKCE flow used by the app.
+- Supabase's built-in email service sends only a few emails per hour and only to members of
+  the Supabase organization; use those addresses for test accounts or configure custom SMTP.
 
 ## Run the app (local development build)
 
@@ -65,11 +78,32 @@ CMake 3.22.1 cannot handle them and the build fails with
 4. Delete `android/app/.cxx` and `node_modules/*/android/.cxx` if a build already failed, then
    run `npm run android` again.
 
-Note: `npx expo prebuild --clean` deletes the `android/` folder, including `local.properties`;
-recreate it afterwards.
+Note: `npx expo prebuild` (with or without `--clean`, also run by `npm run android` after an
+`app.json` change) can remove `local.properties`; check that it still exists before building.
 
 The app forces a right-to-left layout. On the very first launch of a new build, close and
 reopen the app once so Android applies RTL fully.
+
+Do not start Metro with `CI=1`: it turns off file watching, so code changes are not reloaded.
+
+### Testing the email links (deep links)
+
+The verification and password-reset emails open `rasd://login` and `rasd://new-password`
+(through Supabase's `https://…/auth/v1/verify` link). On the emulator, open the email in the
+emulator's browser, or copy the link from the email and open it with `adb`:
+
+```
+adb shell am start -a android.intent.action.VIEW -d "<link from the email>"
+```
+
+Notes:
+
+- A reset link works only on the device (app installation) that requested it (PKCE).
+- Each link can be used once; an expired or used link shows "انتهت صلاحية الرابط".
+- To test a cold start, close the app first (`adb shell am force-stop sa.edu.uj.rasd`).
+- The screens behind these links can be opened without an email, e.g.
+  `adb shell am start -a android.intent.action.VIEW -d "rasd://new-password" sa.edu.uj.rasd`
+  (no code → the expired-link state, as expected).
 
 ## Tests and code style
 

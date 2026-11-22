@@ -10,6 +10,10 @@
     "userInterfaceStyle": "light",
     "android": {
       "package": "sa.edu.uj.rasd",
+      "blockedPermissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#F4F0E9",
         "foregroundImage": "./assets/android-icon-foreground.png",

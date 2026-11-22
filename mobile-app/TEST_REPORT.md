@@ -1,0 +1,35 @@
+# Sprint 1 – Test Report (draft)
+
+Draft of the Sprint 1 test report. It is completed in Phase 5 (automated test results,
+the Sprint Review checklist and the T1-11 cross-check are added then).
+
+## Manual tests with real accounts (Phase 3)
+
+Run by the team on the Android emulator (AVD `Medium_Phone_API_37.0`, local dev build)
+against the team's Supabase project. Results are recorded as reported; no result is assumed.
+
+| #   | Test                                                                          | Use case     | Result           | Notes                                                                                                                     |
+| --- | ----------------------------------------------------------------------------- | ------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Patient login with a registered, verified account                             | UC-02        | PASS             | B1 placeholder opened ("الرئيسية" + logout button)                                                                        |
+| 2   | Session persists after the app is fully closed and reopened                   | UC-02        | PASS             | B1 opened directly, no login asked                                                                                        |
+| 3   | Logout                                                                        | UC-02        | PASS             | Returned to A1; after closing and reopening, A1 opened (not B1)                                                           |
+| 4   | Wrong password                                                                | UC-02 3a     | PASS             | Generic banner "البريد الإلكتروني أو كلمة المرور غير صحيحة."; no field singled out; email kept                            |
+| 8   | Password reset from the email link                                            | UC-03        | PASS (defect D1) | A4 → email link opened on the emulator → A6 → new password (no capital letters) → A1 with "تم تغيير كلمة المرور بنجاح..." |
+| 8b  | Login with the new password                                                   | UC-03        | PASS             | B1 opened                                                                                                                 |
+| 9   | Reset link already used (opened first in a PC browser, then on the emulator)  | UC-03 5a     | PASS             | "انتهت صلاحية الرابط" shown; "طلب رابط جديد" opened A4                                                                    |
+| –   | Caregiver: register, login before verification, login after verification → C2 | UC-01, UC-02 | NOT RUN          | Blocked by the Supabase email limit (2 emails/hour); to be run with a second organization-member email                    |
+| –   | Open another role's route directly (`rasd://alerts` as a patient)             | UC-02        | NOT RUN          | To be run with the full `adb` path                                                                                        |
+
+### Defects
+
+| ID  | Found in | Description                                                                                                                                                                      | Status                                                  |
+| --- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| D1  | Test 8   | After a successful reset, A1 opened with the password field already filled (masked) while the email field was empty. Expected: both fields empty after a reset and after logout. | Open – cause under investigation, fix awaiting approval |
+
+### Test conditions
+
+- Test accounts use email addresses that are members of the team's Supabase organization:
+  the built-in Supabase email service only sends to organization members (limit 2 emails/hour).
+- Reset links must be opened on the emulator itself: the PKCE code verifier is stored in the
+  app, so a link opened in a PC browser cannot complete the reset (it shows a blank page and
+  uses up the link).

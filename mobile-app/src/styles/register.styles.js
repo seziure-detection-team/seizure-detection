@@ -26,4 +26,13 @@ export default StyleSheet.create({
     gap: spacing.md,
     marginBottom: spacing.xl,
   },
+  // Inline error under the role cards (same look as TextField errors)
+  roleError: {
+    color: colors.error,
+    fontFamily: fonts.body.medium,
+    fontSize: fontSizes.caption,
+    lineHeight: lineHeights.caption,
+    marginTop: -spacing.md,
+    marginBottom: spacing.lg,
+  },
 });

@@ -14,6 +14,17 @@ const ar = {
     passwordLabel: 'كلمة المرور',
     passwordPlaceholder: '••••••••',
     passwordHint: '8 أحرف على الأقل، وتحتوي على حرف ورقم',
+    retry: 'إعادة المحاولة',
+    logout: 'تسجيل الخروج',
+  },
+
+  // Inline field errors (UC-01 3a, UC-03 6a)
+  errors: {
+    required: 'هذا الحقل مطلوب.',
+    invalidEmail: 'أدخل بريدًا إلكترونيًا صحيحًا.',
+    weakPassword: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل، وتحتوي على حرف ورقم.',
+    passwordsMismatch: 'كلمتا المرور غير متطابقتين.',
+    roleRequired: 'اختر نوع الحساب.',
   },
 
   // A1 — Login
@@ -81,6 +92,21 @@ const ar = {
       'لم يتم تفعيل حسابك بعد. افتح رابط التفعيل المرسل إلى بريدك الإلكتروني ثم سجّل الدخول.',
     physicianNotAllowed: 'حسابات الأطباء تستخدم لوحة التحكم على الويب، وليس هذا التطبيق.', // UC-02 3b
     passwordUpdated: 'تم تغيير كلمة المرور بنجاح. سجّل الدخول بكلمة المرور الجديدة.', // UC-03 success
+    samePassword: 'كلمة المرور الجديدة يجب أن تختلف عن كلمة المرور الحالية.',
+  },
+
+  // Signed in, but the profile is missing, unreadable or has an unsupported role
+  accountError: {
+    title: 'تعذّر تحميل حسابك',
+    body: 'لم نتمكن من التحقق من بيانات حسابك. حاول مرة أخرى، أو سجّل الخروج.',
+  },
+
+  // Home screens: Phase 3 placeholders (title + logout); completed in Phase 4
+  patientHome: {
+    title: 'الرئيسية',
+  },
+  caregiverAlerts: {
+    title: 'التنبيهات',
   },
 };
 
