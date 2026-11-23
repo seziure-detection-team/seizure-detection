@@ -120,9 +120,71 @@ const ar = {
     simulateLossHint: 'محاكاة انقطاع الاتصال',
   },
 
-  // B5 / B6 — History (UC-09). Completed in Phase D2.
+  // B5 / B6 — History and patterns (FR-14, FR-15, UC-09)
   history: {
     title: 'سجل الأحداث',
+    tabLog: 'السجل',
+    tabPatterns: 'الأنماط',
+    chartTitle: 'عدد الأحداث في الأسبوع',
+    chartSubtitle: 'آخر 6 أسابيع',
+    chartBar: 'أسبوع {week}: {count}', // screen-reader label of one bar
+    emptyTitle: 'لا توجد أحداث مسجلة',
+    emptyBody: 'ستظهر هنا أحداث «حدث صرع محتمل» بعد اكتشافها.',
+    // screen-reader label of one event card (NFR-07 wording)
+    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}، {status}',
+  },
+
+  // Event labels (FR-17, UC-10); keys are the seizure_event.label values in the database
+  eventLabels: {
+    pending_review: 'بانتظار المراجعة',
+    confirmed_seizure: 'نوبة مؤكدة',
+    false_alarm: 'إنذار خاطئ',
+  },
+
+  // B7 — Event detail (FR-17, UC-10). Always "probable seizure event", never a diagnosis (NFR-07)
+  event: {
+    title: 'حدث صرع محتمل',
+    date: 'التاريخ',
+    startTime: 'وقت البدء',
+    duration: 'المدة',
+    classify: 'صنّف هذا الحدث',
+    notFoundTitle: 'الحدث غير موجود',
+    notFoundBody: 'ربما تم حذف الحدث أو أن الرابط غير صحيح.',
+  },
+
+  // Date / time formatting (src/lib/format.js); Western digits as in the designs
+  format: {
+    months: [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ],
+    monthsShort: [
+      'ينا',
+      'فبر',
+      'مار',
+      'أبر',
+      'ماي',
+      'يون',
+      'يول',
+      'أغس',
+      'سبت',
+      'أكت',
+      'نوف',
+      'ديس',
+    ],
+    am: 'ص',
+    pm: 'م',
+    minutes: 'د',
   },
 
   // C2 / C3 / C4 — Caregiver alerts. Phase 3 placeholder; completed in Phase D3.

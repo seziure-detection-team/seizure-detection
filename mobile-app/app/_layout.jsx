@@ -100,6 +100,7 @@ function RootNavigator() {
           <Stack.Screen name="(patient)/home" />
           {/* Fade, so switching Home ↔ History feels like tabs (approved decision D-b) */}
           <Stack.Screen name="(patient)/history" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(patient)/event/[id]" />
         </Stack.Protected>
         <Stack.Protected guard={target === ROUTES.caregiver}>
           <Stack.Screen name="(caregiver)/alerts" />
