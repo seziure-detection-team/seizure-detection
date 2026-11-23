@@ -1,7 +1,10 @@
-# Mobile App (رصد)
+# Mobile App (يقظ)
 
 Patient and caregiver application (React Native with Expo SDK 58, Android only, Arabic RTL).
 Navigation uses Expo Router; authentication and data use Supabase.
+
+The app was renamed from رصد to يقظ (Yaqz). The deep-link scheme `rasd://` and the Android
+package `sa.edu.uj.rasd` keep the old name on purpose: the Supabase email links depend on them.
 
 ## Prerequisites
 
@@ -44,6 +47,18 @@ The auth flows need these settings (Authentication section of the Supabase Dashb
 - Supabase's built-in email service sends only a few emails per hour and only to members of
   the Supabase organization; use those addresses for test accounts or configure custom SMTP.
 
+### Database tables and policies
+
+Every member who runs the app against their own Supabase project must run the SQL files in
+`database/supabase/` in the SQL Editor, in this order:
+
+1. `01_profile_table.sql`
+2. `02_tables_and_policies.sql`
+3. `03_caregiver_patient_name_policy.sql`
+
+Policy 03 lets a caregiver read the name of their linked patient. Without it, a linked
+caregiver sees the error state on the alerts screen instead of the patient's name.
+
 ## Run the app (local development build)
 
 1. Start the Android emulator (Android Studio → Device Manager → ▶), or connect a phone.
@@ -58,6 +73,22 @@ The auth flows need these settings (Authentication section of the Supabase Dashb
    npm start
    ```
    Rebuild with `npm run android` after adding a package with native code or changing `app.json`.
+
+### After pulling the Yaqz branch (new name and icon)
+
+The app name, icon and splash are set in `app.json`, so the existing `android/` folder must be
+regenerated. Stop Metro first, then run from `mobile-app` (Windows cmd). The prebuild can delete
+`android/local.properties`, so back it up and put it back:
+
+```
+copy android\local.properties %TEMP%\local.properties.bak
+npx expo prebuild --platform android --clean
+copy %TEMP%\local.properties.bak android\local.properties
+npm run android
+```
+
+Skip the two `copy` lines if you have no `android/local.properties`. Without this rebuild the
+old name and icon stay on the device.
 
 ### Windows: long paths in the native build
 
@@ -85,6 +116,14 @@ The app forces a right-to-left layout. On the very first launch of a new build, 
 reopen the app once so Android applies RTL fully.
 
 Do not start Metro with `CI=1`: it turns off file watching, so code changes are not reloaded.
+
+### Troubleshooting
+
+- The development build cannot reach Metro on the LAN address: forward the port with `adb`
+  and connect to `http://localhost:8081` in the development build instead:
+  ```
+  adb reverse tcp:8081 tcp:8081
+  ```
 
 ### Testing the email links (deep links)
 
@@ -116,7 +155,8 @@ npm run format:check # Prettier check (npm run format to fix)
 ## Notes
 
 - Add packages with `npx expo install <package>` so their versions match the Expo SDK.
-- Colors, fonts and spacing come from `src/theme` (taken from the Google Stitch designs);
-  all Arabic text lives in `src/i18n/ar.js`.
+- Colors, fonts and spacing come from `src/theme`. The screens were first designed in Google
+  Stitch and then redesigned as Yaqz v2 in Claude Design (`design/DESIGN_SYSTEM.md`).
+  All Arabic text lives in `src/i18n/ar.js`.
 - The Supabase session is stored encrypted: an AES key in Android secure storage
   (`expo-secure-store`) and the encrypted session in AsyncStorage (`src/lib/secureSessionStorage.js`).
