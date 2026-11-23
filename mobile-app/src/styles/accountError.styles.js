@@ -17,7 +17,7 @@ export default StyleSheet.create({
   logoutText: {
     color: colors.primary,
     fontFamily: fonts.body.medium,
-    fontSize: fontSizes.small,
-    lineHeight: lineHeights.small,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
   },
 });

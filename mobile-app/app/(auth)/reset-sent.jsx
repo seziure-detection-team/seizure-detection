@@ -20,7 +20,13 @@ export default function ResetSentScreen() {
       footer={<Button title={ar.resetSent.backToLogin} onPress={() => router.replace('/login')} />}
     >
       <View style={styles.message}>
-        <EmptyState icon="mail" title={ar.resetSent.title} body={ar.resetSent.body} />
+        <EmptyState
+          icon="mail"
+          tone="peach"
+          title={ar.resetSent.title}
+          body={ar.resetSent.body}
+          twoTone
+        />
       </View>
     </Screen>
   );

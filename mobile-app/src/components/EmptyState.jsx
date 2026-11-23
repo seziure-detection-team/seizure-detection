@@ -5,6 +5,7 @@
 // tone sets the ring and icon colours: "default" (lavender: A3, C3), "peach" (A5, C4),
 // "error" (A6 expired link, account error).
 // twoTone shows the title as a two-tone title (28/36, A3/A5); otherwise 22/30 (C3/C4).
+// mutedWords (with twoTone) is passed to TwoToneTitle, e.g. 2 on A3.
 
 import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -19,7 +20,14 @@ const ICON_COLORS = {
   error: colors.error,
 };
 
-export default function EmptyState({ icon, title, body, tone = 'default', twoTone = false }) {
+export default function EmptyState({
+  icon,
+  title,
+  body,
+  tone = 'default',
+  twoTone = false,
+  mutedWords = 1,
+}) {
   return (
     <View style={styles.container}>
       <View style={[styles.ring, styles[`ring_${tone}`] ?? styles.ring_default]}>
@@ -32,7 +40,13 @@ export default function EmptyState({ icon, title, body, tone = 'default', twoTon
         </View>
       </View>
       {twoTone ? (
-        <TwoToneTitle text={title} size="title" align="center" style={styles.titleSpacing} />
+        <TwoToneTitle
+          text={title}
+          size="title"
+          align="center"
+          mutedWords={mutedWords}
+          style={styles.titleSpacing}
+        />
       ) : (
         <Text style={styles.title} accessibilityRole="header">
           {title}

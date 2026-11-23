@@ -141,6 +141,15 @@ describe('TwoToneTitle', () => {
     expect(screen.getByRole('header', { name: ar.login.title })).toBeTruthy();
     expect(screen.getByText('تسجيل')).toHaveStyle({ color: colors.textHeadline });
   });
+
+  test('mutedWords greys more leading words; at least one word stays ink (A3)', async () => {
+    expect(splitTitle(ar.verifyEmail.title, 2)).toEqual(['تحقق من', ' بريدك الإلكتروني']);
+    expect(splitTitle('تحقق من', 2)).toEqual(['', 'تحقق من']);
+
+    await render(<TwoToneTitle text={ar.verifyEmail.title} mutedWords={2} />);
+    expect(screen.getByRole('header', { name: ar.verifyEmail.title })).toBeTruthy();
+    expect(screen.getByText('تحقق من')).toHaveStyle({ color: colors.textHeadline });
+  });
 });
 
 describe('Badge', () => {

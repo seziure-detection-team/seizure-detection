@@ -1,10 +1,11 @@
 // File: ar.js
 // Purpose: All user-facing Arabic strings of the app. Components must not hard-code text.
-// Screen texts are copied from the approved Google Stitch designs (A1–A6).
+// Screen texts follow the approved Yaqz v2 designs (mobile-app/design/).
 
 const ar = {
   common: {
-    appName: 'رصد',
+    appName: 'يقظ', // display name; app.json "name" changes in Phase E
+
     loading: 'جارٍ التحميل',
     back: 'رجوع',
     showPassword: 'إظهار كلمة المرور',

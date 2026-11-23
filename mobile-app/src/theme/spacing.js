@@ -38,7 +38,6 @@ export const sizes = {
   iconChip: 36, // icon chip inside a text field
   badgeHeight: 28,
   badgeDot: 7,
-  iconTile: 48, // A1 logo tile, A6 lock tile
   emptyCircle: 104, // round icon circle of empty / message states (A3, A5, C3, C4)
   emptyRing: 160, // thin ring around the empty-state circle
   logo: 28, // default logo size (minimum 24)
