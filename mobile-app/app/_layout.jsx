@@ -98,6 +98,8 @@ function RootNavigator() {
         {/* Role screens: only for a signed-in user with that role (UC-02 step 5) */}
         <Stack.Protected guard={target === ROUTES.patient}>
           <Stack.Screen name="(patient)/home" />
+          {/* Fade, so switching Home ↔ History feels like tabs (approved decision D-b) */}
+          <Stack.Screen name="(patient)/history" options={{ animation: 'fade' }} />
         </Stack.Protected>
         <Stack.Protected guard={target === ROUTES.caregiver}>
           <Stack.Screen name="(caregiver)/alerts" />

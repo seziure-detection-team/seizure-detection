@@ -102,10 +102,30 @@ const ar = {
     body: 'لم نتمكن من التحقق من بيانات حسابك. حاول مرة أخرى، أو سجّل الخروج.',
   },
 
-  // Home screens: Phase 3 placeholders (title + logout); completed in Phase 4
+  // B1 / B2 / B4 — Patient Home (FR-05, UC-04). B2/B4 are a simulation in Sprint 1.
   patientHome: {
-    title: 'الرئيسية',
+    eyebrow: 'حساب مريض',
+    greeting: 'مرحبًا، {name}',
+    greetingNoName: 'مرحبًا',
+    wristband: 'السوار',
+    wristbandStatus: 'السوار، {status}', // screen-reader label of the wristband card
+    statusDisconnected: 'غير متصل',
+    statusConnected: 'متصل',
+    statusLost: 'انقطع الاتصال',
+    monitoringActive: 'المراقبة نشطة',
+    connect: 'ربط السوار',
+    reconnect: 'إعادة الاتصال',
+    lostTitle: 'انقطع الاتصال بالسوار',
+    lostBody: 'المراقبة متوقفة حتى تتم إعادة الاتصال.',
+    simulateLossHint: 'محاكاة انقطاع الاتصال',
   },
+
+  // B5 / B6 — History (UC-09). Completed in Phase D2.
+  history: {
+    title: 'سجل الأحداث',
+  },
+
+  // C2 / C3 / C4 — Caregiver alerts. Phase 3 placeholder; completed in Phase D3.
   caregiverAlerts: {
     title: 'التنبيهات',
   },

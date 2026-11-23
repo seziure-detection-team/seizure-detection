@@ -3,7 +3,7 @@
 
 import { StyleSheet } from 'react-native';
 
-import { colors, spacing } from '../theme';
+import { colors, sizes, spacing } from '../theme';
 
 export default StyleSheet.create({
   safeArea: {
@@ -18,6 +18,9 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  inner: {
+    flex: 1,
+  },
   keyboard: {
     flex: 1,
   },
@@ -26,6 +29,16 @@ export default StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
     paddingBottom: spacing.xl,
+  },
+  // Room for the floating bottom bar (its height + its bottom gap + normal padding)
+  contentWithBottomBar: {
+    paddingBottom: sizes.navHeight + spacing.sm + spacing.xl,
+  },
+  bottomBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: spacing.sm,
   },
   body: {
     flexGrow: 1,
