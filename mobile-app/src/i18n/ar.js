@@ -108,6 +108,18 @@ const ar = {
   caregiverAlerts: {
     title: 'التنبيهات',
   },
+
+  // Bottom navigation of the patient screens (B1/B2/B4, B5/B6)
+  nav: {
+    home: 'الرئيسية',
+    history: 'السجل',
+  },
+
+  // Labels on screens that show sample data (Sprint 1 data rules)
+  sampleData: {
+    sample: 'بيانات تجريبية',
+    simulation: 'محاكاة',
+  },
 };
 
 export default ar;

@@ -39,9 +39,9 @@ export const sizes = {
   badgeHeight: 28,
   badgeDot: 7,
   iconTile: 48, // A1 logo tile, A6 lock tile
-  roleIconTile: 44, // icon tile inside a role card (A2)
-  checkCircle: 22, // selection circle on a role card (A2)
-  emptyCircle: 88, // round icon background of empty / message states (A3, A5, C3)
+  emptyCircle: 104, // round icon circle of empty / message states (A3, A5, C3, C4)
+  emptyRing: 160, // thin ring around the empty-state circle
+  logo: 28, // default logo size (minimum 24)
   iconXs: 12,
   iconSm: 16,
   iconMd: 20,

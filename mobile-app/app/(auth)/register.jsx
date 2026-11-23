@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import Banner from '../../src/components/Banner';
 import Button from '../../src/components/Button';
 import PasswordField from '../../src/components/PasswordField';
-import RoleCard from '../../src/components/RoleCard';
+import ChoiceChip from '../../src/components/ChoiceChip';
 import Screen from '../../src/components/Screen';
 import ScreenHeader from '../../src/components/ScreenHeader';
 import TextField from '../../src/components/TextField';
@@ -103,13 +103,13 @@ export default function RegisterScreen() {
 
       <Text style={styles.roleLabel}>{ar.register.roleLabel}</Text>
       <View style={styles.roleRow} accessibilityRole="radiogroup">
-        <RoleCard
+        <ChoiceChip
           label={ar.register.rolePatient}
           icon="user"
           selected={role === ROLE_PATIENT}
           onPress={() => selectRole(ROLE_PATIENT)}
         />
-        <RoleCard
+        <ChoiceChip
           label={ar.register.roleCaregiver}
           icon="users"
           selected={role === ROLE_CAREGIVER}

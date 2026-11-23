@@ -1,6 +1,6 @@
 // File: PasswordField.jsx
-// Purpose: Password input based on TextField, with an eye icon that shows or hides the
-// password (A1, A2, A6). The value is never logged.
+// Purpose: Password input based on TextField, with a lock icon chip (overridable with `icon`)
+// and an eye icon that shows or hides the password (A1, A2, A6). The value is never logged.
 
 import { useState } from 'react';
 import { Pressable } from 'react-native';
@@ -32,6 +32,7 @@ export default function PasswordField(props) {
       autoCapitalize="none"
       autoCorrect={false}
       latin
+      icon="lock"
       accessory={toggle}
       {...props}
     />

@@ -1,40 +1,57 @@
 // File: Banner.styles.js
-// Purpose: Styles of the message banner (error and success variants), modelled on the
-// warning banner of design B4.
+// Purpose: Styles of the message box (error, warning and success variants), as the
+// "connection lost" alert of design B4.
 
 import { StyleSheet } from 'react-native';
 
-import { colors, fonts, fontSizes, lineHeights, radii, spacing } from '../theme';
+import { colors, fonts, fontSizes, lineHeights, radii, sizes, spacing } from '../theme';
 
 export default StyleSheet.create({
   banner: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    borderRadius: radii.md,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
+    alignItems: 'center',
+    gap: spacing.md,
+    borderRadius: radii.xl,
+    padding: spacing.lg,
     marginBottom: spacing.lg,
   },
   error: {
     backgroundColor: colors.errorBg,
   },
-  success: {
-    backgroundColor: colors.sage,
+  warning: {
+    backgroundColor: colors.amberBg, // spec "warningSoft"
   },
-  icon: {
-    marginTop: spacing.xxs,
-    marginEnd: spacing.sm,
+  success: {
+    backgroundColor: colors.sage, // spec "primarySoft"
+  },
+  iconChip: {
+    width: sizes.iconChip,
+    height: sizes.iconChip,
+    borderRadius: radii.md,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  texts: {
+    flex: 1,
+  },
+  title: {
+    fontFamily: fonts.body.semiBold,
+    fontSize: fontSizes.heading,
+    lineHeight: lineHeights.heading,
   },
   message: {
-    flex: 1,
     fontFamily: fonts.body.medium,
-    fontSize: fontSizes.small,
-    lineHeight: lineHeights.small,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
   },
-  messageError: {
+  errorText: {
     color: colors.error,
   },
-  messageSuccess: {
+  warningText: {
+    color: colors.onWarningSoft,
+  },
+  successText: {
     color: colors.primary,
   },
 });
