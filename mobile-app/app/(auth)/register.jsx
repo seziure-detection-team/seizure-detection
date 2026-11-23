@@ -10,14 +10,18 @@ import { useRouter } from 'expo-router';
 import Banner from '../../src/components/Banner';
 import Button from '../../src/components/Button';
 import PasswordField from '../../src/components/PasswordField';
-import RoleCard from '../../src/components/RoleCard';
+import ChoiceChip from '../../src/components/ChoiceChip';
 import Screen from '../../src/components/Screen';
 import ScreenHeader from '../../src/components/ScreenHeader';
 import TextField from '../../src/components/TextField';
+import TwoToneTitle from '../../src/components/TwoToneTitle';
 import ar from '../../src/i18n/ar';
 import { signUp } from '../../src/lib/auth';
 import { hasErrors, validateRegister } from '../../src/lib/validation';
 import styles from '../../src/styles/register.styles';
+
+// Wristband ring for the "مريض" chip, tinted in the chip's label colour (A2 design)
+const patientIcon = require('../../assets/images/logo.png');
 
 // Role values match profile.role in the database ('patient' | 'caregiver')
 const ROLE_PATIENT = 'patient';
@@ -57,11 +61,9 @@ export default function RegisterScreen() {
   };
 
   return (
-    <Screen>
+    <Screen footer={<Button title={ar.register.submit} onPress={handleSubmit} loading={loading} />}>
       <ScreenHeader onBack={() => router.back()} />
-      <Text style={styles.title} accessibilityRole="header">
-        {ar.register.title}
-      </Text>
+      <TwoToneTitle text={ar.register.title} style={styles.title} />
 
       {errorKind ? <Banner variant="error" message={ar.messages[errorKind]} /> : null}
 
@@ -72,6 +74,7 @@ export default function RegisterScreen() {
         placeholder={ar.register.namePlaceholder}
         error={errors.fullName && ar.errors[errors.fullName]}
         editable={!loading}
+        icon="user"
         autoComplete="name"
         textContentType="name"
       />
@@ -83,6 +86,7 @@ export default function RegisterScreen() {
         error={errors.email && ar.errors[errors.email]}
         editable={!loading}
         latin
+        icon="mail"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -103,13 +107,13 @@ export default function RegisterScreen() {
 
       <Text style={styles.roleLabel}>{ar.register.roleLabel}</Text>
       <View style={styles.roleRow} accessibilityRole="radiogroup">
-        <RoleCard
+        <ChoiceChip
           label={ar.register.rolePatient}
-          icon="user"
+          image={patientIcon}
           selected={role === ROLE_PATIENT}
           onPress={() => selectRole(ROLE_PATIENT)}
         />
-        <RoleCard
+        <ChoiceChip
           label={ar.register.roleCaregiver}
           icon="users"
           selected={role === ROLE_CAREGIVER}
@@ -117,12 +121,12 @@ export default function RegisterScreen() {
         />
       </View>
       {errors.role ? (
-        <Text style={styles.roleError} accessibilityLiveRegion="polite">
-          {ar.errors[errors.role]}
-        </Text>
+        <View style={styles.roleErrorBox}>
+          <Text style={styles.roleError} accessibilityLiveRegion="polite">
+            {ar.errors[errors.role]}
+          </Text>
+        </View>
       ) : null}
-
-      <Button title={ar.register.submit} onPress={handleSubmit} loading={loading} />
     </Screen>
   );
 }

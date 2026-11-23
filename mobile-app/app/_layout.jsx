@@ -12,14 +12,10 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Feather } from '@expo/vector-icons';
 import {
-  NotoNaskhArabic_500Medium,
-  NotoNaskhArabic_600SemiBold,
-  NotoNaskhArabic_700Bold,
-} from '@expo-google-fonts/noto-naskh-arabic';
-import {
   IBMPlexSansArabic_400Regular,
   IBMPlexSansArabic_500Medium,
   IBMPlexSansArabic_600SemiBold,
+  IBMPlexSansArabic_700Bold,
 } from '@expo-google-fonts/ibm-plex-sans-arabic';
 import {
   IBMPlexSans_400Regular,
@@ -35,12 +31,10 @@ import { colors } from '../src/theme';
 // The Feather icon font is preloaded too, so icons do not appear late on first render.
 const fontAssets = {
   ...Feather.font,
-  NotoNaskhArabic_500Medium,
-  NotoNaskhArabic_600SemiBold,
-  NotoNaskhArabic_700Bold,
   IBMPlexSansArabic_400Regular,
   IBMPlexSansArabic_500Medium,
   IBMPlexSansArabic_600SemiBold,
+  IBMPlexSansArabic_700Bold,
   IBMPlexSans_400Regular,
   IBMPlexSans_500Medium,
   IBMPlexSans_600SemiBold,
@@ -104,6 +98,9 @@ function RootNavigator() {
         {/* Role screens: only for a signed-in user with that role (UC-02 step 5) */}
         <Stack.Protected guard={target === ROUTES.patient}>
           <Stack.Screen name="(patient)/home" />
+          {/* Fade, so switching Home ↔ History feels like tabs (approved decision D-b) */}
+          <Stack.Screen name="(patient)/history" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(patient)/event/[id]" />
         </Stack.Protected>
         <Stack.Protected guard={target === ROUTES.caregiver}>
           <Stack.Screen name="(caregiver)/alerts" />

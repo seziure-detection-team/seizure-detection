@@ -7,18 +7,18 @@
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
 
 import Banner from '../../src/components/Banner';
 import Button from '../../src/components/Button';
+import Logo from '../../src/components/Logo';
 import PasswordField from '../../src/components/PasswordField';
 import Screen from '../../src/components/Screen';
 import TextField from '../../src/components/TextField';
+import TwoToneTitle from '../../src/components/TwoToneTitle';
 import { useAuth } from '../../src/context/AuthContext';
 import ar from '../../src/i18n/ar';
 import { hasErrors, validateLogin } from '../../src/lib/validation';
 import styles from '../../src/styles/login.styles';
-import { colors, sizes } from '../../src/theme';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -52,27 +52,29 @@ export default function LoginScreen() {
     if (!result.ok) setBanner({ variant: 'error', kind: result.kind });
   };
 
+  // Bottom of the screen (A1 design): the main button, then the sign-up link
   const footer = (
-    <View style={styles.footerRow}>
-      <Text style={styles.footerText}>{ar.login.noAccount}</Text>
-      <Pressable
-        onPress={() => router.push('/register')}
-        accessibilityRole="link"
-        disabled={loading}
-      >
-        <Text style={styles.linkText}>{ar.login.createAccount}</Text>
-      </Pressable>
-    </View>
+    <>
+      <Button title={ar.login.submit} onPress={handleSubmit} loading={loading} />
+      <View style={styles.footerRow}>
+        <Text style={styles.footerText}>{ar.login.noAccount}</Text>
+        <Pressable
+          onPress={() => router.push('/register')}
+          accessibilityRole="link"
+          disabled={loading}
+        >
+          <Text style={styles.footerLink}>{ar.login.createAccount}</Text>
+        </Pressable>
+      </View>
+    </>
   );
 
   return (
     <Screen footer={footer}>
-      <View style={styles.logoTile}>
-        <Feather name="activity" size={sizes.iconLg} color={colors.surface} />
+      <View style={styles.logo}>
+        <Logo />
       </View>
-      <Text style={styles.title} accessibilityRole="header">
-        {ar.login.title}
-      </Text>
+      <TwoToneTitle text={ar.login.title} />
       <Text style={styles.subtitle}>{ar.login.subtitle}</Text>
 
       {banner ? <Banner variant={banner.variant} message={ar.messages[banner.kind]} /> : null}
@@ -85,6 +87,7 @@ export default function LoginScreen() {
         error={errors.email && ar.errors[errors.email]}
         editable={!loading}
         latin
+        icon="mail"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -110,8 +113,6 @@ export default function LoginScreen() {
       >
         <Text style={styles.linkText}>{ar.login.forgotPassword}</Text>
       </Pressable>
-
-      <Button title={ar.login.submit} onPress={handleSubmit} loading={loading} />
     </Screen>
   );
 }

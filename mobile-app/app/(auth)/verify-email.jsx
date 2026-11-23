@@ -20,7 +20,14 @@ export default function VerifyEmailScreen() {
       footer={<Button title={ar.verifyEmail.goToLogin} onPress={() => router.replace('/login')} />}
     >
       <View style={styles.message}>
-        <EmptyState icon="mail" title={ar.verifyEmail.title} body={ar.verifyEmail.body} />
+        {/* Two muted words, "تحقق من", as in the A3 design */}
+        <EmptyState
+          icon="mail"
+          title={ar.verifyEmail.title}
+          body={ar.verifyEmail.body}
+          twoTone
+          mutedWords={2}
+        />
       </View>
     </Screen>
   );

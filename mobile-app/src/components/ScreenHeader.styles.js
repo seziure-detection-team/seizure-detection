@@ -1,24 +1,29 @@
 // File: ScreenHeader.styles.js
-// Purpose: Styles of the screen header (back button on A2 and A4).
+// Purpose: Styles of the screen header (back button, eyebrow + title, end action).
 
 import { StyleSheet } from 'react-native';
 
-import { colors, radii, sizes, spacing } from '../theme';
+import { colors, fonts, fontSizes, lineHeights, spacing } from '../theme';
 
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginBottom: spacing.lg,
+    alignItems: 'flex-start',
+    gap: spacing.lg,
+    marginBottom: spacing.xl,
   },
-  // Square surface button; at the start of the row = right side in RTL
-  backButton: {
-    width: sizes.touchTarget,
-    height: sizes.touchTarget,
-    borderRadius: radii.md,
-    borderWidth: sizes.borderWidth,
-    borderColor: colors.line,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
+  // Takes the free space, so the action is pushed to the end (left in RTL)
+  titleBlock: {
+    flex: 1,
+  },
+  eyebrow: {
+    color: colors.muted,
+    fontFamily: fonts.body.regular,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
+  },
+  action: {
+    marginStart: 'auto',
+    marginTop: spacing.sm,
   },
 });

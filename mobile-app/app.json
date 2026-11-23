@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "رصد",
+    "name": "يقظ",
     "slug": "rasd-mobile",
     "scheme": "rasd",
     "version": "1.0.0",
@@ -15,9 +15,8 @@
         "android.permission.USE_FINGERPRINT"
       ],
       "adaptiveIcon": {
-        "backgroundColor": "#F4F0E9",
+        "backgroundColor": "#F4EFE7",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       }
     },
@@ -26,7 +25,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#F4F0E9",
+          "backgroundColor": "#F4EFE7",
           "image": "./assets/splash-icon.png",
           "imageWidth": 120,
           "resizeMode": "contain"

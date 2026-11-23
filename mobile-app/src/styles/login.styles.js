@@ -1,57 +1,52 @@
 // File: login.styles.js
-// Purpose: Styles of the Login screen (A1).
+// Purpose: Styles of the Login screen (A1, Yaqz v2).
 
 import { StyleSheet } from 'react-native';
 
-import { colors, fonts, fontSizes, lineHeights, radii, sizes, spacing } from '../theme';
+import { colors, fonts, fontSizes, lineHeights, spacing } from '../theme';
 
 export default StyleSheet.create({
-  // Purple logo tile with the pulse icon, at the start of the screen (right in RTL)
-  logoTile: {
-    alignSelf: 'flex-start',
-    width: sizes.iconTile,
-    height: sizes.iconTile,
-    borderRadius: radii.md,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: spacing.xxxl,
-    marginBottom: spacing.xl,
-  },
-  title: {
-    color: colors.text,
-    fontFamily: fonts.heading.bold,
-    fontSize: fontSizes.h1,
-    lineHeight: lineHeights.h1,
+  // Logo at the start of the screen (right in RTL)
+  logo: {
+    marginTop: spacing.lg,
+    marginBottom: spacing.xxxl,
   },
   subtitle: {
     color: colors.muted,
     fontFamily: fonts.body.regular,
     fontSize: fontSizes.body,
     lineHeight: lineHeights.body,
-    marginTop: spacing.xs,
-    marginBottom: spacing.xl,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xxl,
   },
   forgotLink: {
     alignSelf: 'flex-start',
-    marginBottom: spacing.xl,
+    marginTop: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   linkText: {
     color: colors.primary,
     fontFamily: fonts.body.medium,
-    fontSize: fontSizes.small,
-    lineHeight: lineHeights.small,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
   },
   footerRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: spacing.xl,
   },
   footerText: {
     color: colors.muted,
     fontFamily: fonts.body.regular,
-    fontSize: fontSizes.small,
-    lineHeight: lineHeights.small,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
     marginEnd: spacing.xs,
+  },
+  footerLink: {
+    color: colors.primary,
+    fontFamily: fonts.body.semiBold,
+    fontSize: fontSizes.body,
+    lineHeight: lineHeights.body,
   },
 });

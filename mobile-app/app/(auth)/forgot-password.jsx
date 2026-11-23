@@ -13,6 +13,7 @@ import Button from '../../src/components/Button';
 import Screen from '../../src/components/Screen';
 import ScreenHeader from '../../src/components/ScreenHeader';
 import TextField from '../../src/components/TextField';
+import TwoToneTitle from '../../src/components/TwoToneTitle';
 import ar from '../../src/i18n/ar';
 import { requestReset } from '../../src/lib/auth';
 import { hasErrors, validateResetRequest } from '../../src/lib/validation';
@@ -39,11 +40,11 @@ export default function ForgotPasswordScreen() {
   };
 
   return (
-    <Screen>
+    <Screen
+      footer={<Button title={ar.forgotPassword.submit} onPress={handleSubmit} loading={loading} />}
+    >
       <ScreenHeader onBack={() => router.back()} />
-      <Text style={styles.title} accessibilityRole="header">
-        {ar.forgotPassword.title}
-      </Text>
+      <TwoToneTitle text={ar.forgotPassword.title} />
       <Text style={styles.subtitle}>{ar.forgotPassword.subtitle}</Text>
 
       {errorKind ? <Banner variant="error" message={ar.messages[errorKind]} /> : null}
@@ -59,18 +60,12 @@ export default function ForgotPasswordScreen() {
         error={errors.email && ar.errors[errors.email]}
         editable={!loading}
         latin
+        icon="mail"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
         autoComplete="email"
         textContentType="emailAddress"
-      />
-
-      <Button
-        title={ar.forgotPassword.submit}
-        onPress={handleSubmit}
-        loading={loading}
-        style={styles.submit}
       />
     </Screen>
   );

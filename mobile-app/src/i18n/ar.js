@@ -1,10 +1,11 @@
 // File: ar.js
 // Purpose: All user-facing Arabic strings of the app. Components must not hard-code text.
-// Screen texts are copied from the approved Google Stitch designs (A1–A6).
+// Screen texts follow the approved Yaqz v2 designs (mobile-app/design/).
 
 const ar = {
   common: {
-    appName: 'رصد',
+    appName: 'يقظ', // display name; app.json "name" changes in Phase E
+
     loading: 'جارٍ التحميل',
     back: 'رجوع',
     showPassword: 'إظهار كلمة المرور',
@@ -101,12 +102,115 @@ const ar = {
     body: 'لم نتمكن من التحقق من بيانات حسابك. حاول مرة أخرى، أو سجّل الخروج.',
   },
 
-  // Home screens: Phase 3 placeholders (title + logout); completed in Phase 4
+  // B1 / B2 / B4 — Patient Home (FR-05, UC-04). B2/B4 are a simulation in Sprint 1.
   patientHome: {
-    title: 'الرئيسية',
+    eyebrow: 'حساب مريض',
+    greeting: 'مرحبًا، {name}',
+    greetingNoName: 'مرحبًا',
+    wristband: 'السوار',
+    wristbandStatus: 'السوار، {status}', // screen-reader label of the wristband card
+    statusDisconnected: 'غير متصل',
+    statusConnected: 'متصل',
+    statusLost: 'انقطع الاتصال',
+    monitoringActive: 'المراقبة نشطة',
+    connect: 'ربط السوار',
+    reconnect: 'إعادة الاتصال',
+    lostTitle: 'انقطع الاتصال بالسوار',
+    lostBody: 'المراقبة متوقفة حتى تتم إعادة الاتصال.',
+    simulateLossHint: 'محاكاة انقطاع الاتصال',
   },
+
+  // B5 / B6 — History and patterns (FR-14, FR-15, UC-09)
+  history: {
+    title: 'سجل الأحداث',
+    tabLog: 'السجل',
+    tabPatterns: 'الأنماط',
+    chartTitle: 'عدد الأحداث في الأسبوع',
+    chartSubtitle: 'آخر 6 أسابيع',
+    chartBar: 'أسبوع {week}: {count}', // screen-reader label of one bar
+    emptyTitle: 'لا توجد أحداث مسجلة',
+    emptyBody: 'ستظهر هنا أحداث «حدث صرع محتمل» بعد اكتشافها.',
+    // screen-reader label of one event card (NFR-07 wording)
+    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}، {status}',
+  },
+
+  // Event labels (FR-17, UC-10); keys are the seizure_event.label values in the database
+  eventLabels: {
+    pending_review: 'بانتظار المراجعة',
+    confirmed_seizure: 'نوبة مؤكدة',
+    false_alarm: 'إنذار خاطئ',
+  },
+
+  // B7 — Event detail (FR-17, UC-10). Always "probable seizure event", never a diagnosis (NFR-07)
+  event: {
+    title: 'حدث صرع محتمل',
+    date: 'التاريخ',
+    startTime: 'وقت البدء',
+    duration: 'المدة',
+    classify: 'صنّف هذا الحدث',
+    notFoundTitle: 'الحدث غير موجود',
+    notFoundBody: 'ربما تم حذف الحدث أو أن الرابط غير صحيح.',
+  },
+
+  // Date / time formatting (src/lib/format.js); Western digits as in the designs
+  format: {
+    months: [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ],
+    monthsShort: [
+      'ينا',
+      'فبر',
+      'مار',
+      'أبر',
+      'ماي',
+      'يون',
+      'يول',
+      'أغس',
+      'سبت',
+      'أكت',
+      'نوف',
+      'ديس',
+    ],
+    am: 'ص',
+    pm: 'م',
+    minutes: 'د',
+  },
+
+  // C2 / C3 / C4 — Caregiver alerts (FR-13, UC-08)
   caregiverAlerts: {
+    eyebrow: 'حساب مرافق',
     title: 'التنبيهات',
+    patient: 'المريض: {name}',
+    emptyTitle: 'لا توجد تنبيهات',
+    emptyBody: 'ستظهر هنا تنبيهات «حدث صرع محتمل» للمريض المرتبط بك، مع تاريخها ووقتها ومدتها.',
+    notLinkedTitle: 'لم يتم ربط مريض بعد',
+    notLinkedBody: 'ستظهر هنا تنبيهات المريض بعد ربطه بحسابك.',
+    itemTitle: 'حدث صرع محتمل', // NFR-07: never a diagnosis
+    // screen-reader label of one alert card
+    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}',
+  },
+
+  // Bottom navigation of the patient screens (B1/B2/B4, B5/B6)
+  nav: {
+    home: 'الرئيسية',
+    history: 'السجل',
+  },
+
+  // Labels on screens that show sample data (Sprint 1 data rules)
+  sampleData: {
+    sample: 'بيانات تجريبية',
+    simulation: 'محاكاة',
   },
 };
 

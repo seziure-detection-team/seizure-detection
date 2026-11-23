@@ -9,18 +9,19 @@
 
 import { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 
 import Banner from '../../src/components/Banner';
 import Button from '../../src/components/Button';
 import EmptyState from '../../src/components/EmptyState';
+import Logo from '../../src/components/Logo';
 import PasswordField from '../../src/components/PasswordField';
 import Screen from '../../src/components/Screen';
+import TwoToneTitle from '../../src/components/TwoToneTitle';
 import { useAuth } from '../../src/context/AuthContext';
 import ar from '../../src/i18n/ar';
 import { hasErrors, validateNewPassword } from '../../src/lib/validation';
 import styles from '../../src/styles/newPassword.styles';
-import { colors, sizes } from '../../src/theme';
+import { colors } from '../../src/theme';
 
 export default function NewPasswordScreen() {
   const { recovery, completeRecovery, exitRecovery, retryRecovery } = useAuth();
@@ -99,13 +100,13 @@ export default function NewPasswordScreen() {
   }
 
   return (
-    <Screen>
-      <View style={styles.lockTile}>
-        <Feather name="lock" size={sizes.iconMd} color={colors.primary} />
+    <Screen
+      footer={<Button title={ar.newPassword.submit} onPress={handleSubmit} loading={loading} />}
+    >
+      <View style={styles.logo}>
+        <Logo />
       </View>
-      <Text style={styles.title} accessibilityRole="header">
-        {ar.newPassword.title}
-      </Text>
+      <TwoToneTitle text={ar.newPassword.title} />
       <Text style={styles.subtitle}>{ar.newPassword.subtitle}</Text>
 
       {errorKind ? <Banner variant="error" message={ar.messages[errorKind]} /> : null}
@@ -130,13 +131,6 @@ export default function NewPasswordScreen() {
         editable={!loading}
         autoComplete="new-password"
         textContentType="newPassword"
-      />
-
-      <Button
-        title={ar.newPassword.submit}
-        onPress={handleSubmit}
-        loading={loading}
-        style={styles.submit}
       />
     </Screen>
   );
