@@ -12,24 +12,24 @@ Notes on the images:
 
 ## Screens (Sprint 1)
 
-| ID  | File                            | Screen                                   |
-| --- | ------------------------------- | ---------------------------------------- |
-| A1  | `A1-login.png`                  | Login                                    |
-| A2  | `A2-create-account.png`         | Create account (patient / caregiver)     |
-| A3  | `A3-verify-email.png`           | Check your email (verification)          |
-| A4  | `A4-forgot-password.png`        | Forgot password                          |
-| A5  | `A5-reset-link-sent.png`        | Reset link sent                          |
-| A6  | `A6-new-password.png`           | New password                             |
-| B1  | `B1-patient-home.png`           | Patient home: wristband not connected    |
-| B2  | `B2-monitoring-active.png`      | Patient home: monitoring active          |
-| B4  | `B4-connection-lost.png`        | Patient home: connection lost (warning)  |
-| B5  | `B5-seizure-history.png`        | Event history                            |
-| B6  | `B6-patterns.png`               | Patterns (events per week)               |
-| B7  | `B7-event-detail.png`           | Event detail (confirm / false alarm)     |
-| C1  | `C1-caregiver-notification.png` | Caregiver push notification (lock screen)|
-| C2  | `C2-caregiver-alerts.png`       | Caregiver alerts                         |
-| C3  | `C3-alerts-empty.png`           | No alerts                                |
-| C4  | `C4-no-linked-patient.png`      | No linked patient                        |
+| ID  | File                            | Screen                                    |
+| --- | ------------------------------- | ----------------------------------------- |
+| A1  | `A1-login.png`                  | Login                                     |
+| A2  | `A2-create-account.png`         | Create account (patient / caregiver)      |
+| A3  | `A3-verify-email.png`           | Check your email (verification)           |
+| A4  | `A4-forgot-password.png`        | Forgot password                           |
+| A5  | `A5-reset-link-sent.png`        | Reset link sent                           |
+| A6  | `A6-new-password.png`           | New password                              |
+| B1  | `B1-patient-home.png`           | Patient home: wristband not connected     |
+| B2  | `B2-monitoring-active.png`      | Patient home: monitoring active           |
+| B4  | `B4-connection-lost.png`        | Patient home: connection lost (warning)   |
+| B5  | `B5-seizure-history.png`        | Event history                             |
+| B6  | `B6-patterns.png`               | Patterns (events per week)                |
+| B7  | `B7-event-detail.png`           | Event detail (confirm / false alarm)      |
+| C1  | `C1-caregiver-notification.png` | Caregiver push notification (lock screen) |
+| C2  | `C2-caregiver-alerts.png`       | Caregiver alerts                          |
+| C3  | `C3-alerts-empty.png`           | No alerts                                 |
+| C4  | `C4-no-linked-patient.png`      | No linked patient                         |
 
 In Sprint 1 only login, registration, password reset and role-based routing are functional.
 The B and C screens show sample data; real data arrives in later sprints (FR-05, FR-13,
@@ -45,29 +45,29 @@ FR-14, FR-15, FR-17).
 
 ## Colors
 
-| Token           | Hex       | Use / contrast            |
-| --------------- | --------- | ------------------------- |
-| `bg`            | `#F4EFE7` | screen background         |
-| `surface`       | `#FFFDF9` | cards, fields             |
-| `line`          | `#E3DACB` | borders, dividers         |
-| `track`         | `#E9E1D4` | segmented-tab background  |
+| Token           | Hex       | Use / contrast                |
+| --------------- | --------- | ----------------------------- |
+| `bg`            | `#F4EFE7` | screen background             |
+| `surface`       | `#FFFDF9` | cards, fields                 |
+| `line`          | `#E3DACB` | borders, dividers             |
+| `track`         | `#E9E1D4` | segmented-tab background      |
 | `ink`           | `#17141C` | text, primary button (16.8:1) |
-| `inkPressed`    | `#2A2531` | pressed primary button    |
-| `textMuted`     | `#6E6672` | secondary text (4.8:1)    |
-| `textHeadline`  | `#A39BA6` | first word of a title only|
-| `primary`       | `#6347A3` | name, links, focus (6.2:1)|
-| `primarySoft`   | `#EEE6FA` | icon chips, soft fills    |
-| `lavender`      | `#CDB8F0` | decorative                |
-| `peach`         | `#F2AE88` | decorative                |
-| `success`       | `#2B7350` | "connected" (5.0:1)       |
-| `successSoft`   | `#E1EFE6` | background                |
-| `warning`       | `#8F5400` | "connection lost" (5.4:1) |
-| `warningSoft`   | `#F8E9D2` | background                |
-| `onWarningSoft` | `#6B3F00` | text on warningSoft (7.5:1) |
-| `error`         | `#B3261E` | field errors (5.7:1)      |
-| `errorSoft`     | `#F8E0DD` | background                |
-| `peachDeep`     | `#A4532A` | (4.8:1)                   |
-| `peachSoft`     | `#FBE7DA` | background                |
+| `inkPressed`    | `#2A2531` | pressed primary button        |
+| `textMuted`     | `#6E6672` | secondary text (4.8:1)        |
+| `textHeadline`  | `#A39BA6` | first word of a title only    |
+| `primary`       | `#6347A3` | name, links, focus (6.2:1)    |
+| `primarySoft`   | `#EEE6FA` | icon chips, soft fills        |
+| `lavender`      | `#CDB8F0` | decorative                    |
+| `peach`         | `#F2AE88` | decorative                    |
+| `success`       | `#2B7350` | "connected" (5.0:1)           |
+| `successSoft`   | `#E1EFE6` | background                    |
+| `warning`       | `#8F5400` | "connection lost" (5.4:1)     |
+| `warningSoft`   | `#F8E9D2` | background                    |
+| `onWarningSoft` | `#6B3F00` | text on warningSoft (7.5:1)   |
+| `error`         | `#B3261E` | field errors (5.7:1)          |
+| `errorSoft`     | `#F8E0DD` | background                    |
+| `peachDeep`     | `#A4532A` | (4.8:1)                       |
+| `peachSoft`     | `#FBE7DA` | background                    |
 
 Connection lost (B4) uses **warning** (amber), not error (red). Red is only for field errors.
 
@@ -127,18 +127,18 @@ button: { shadowColor: '#17141C', shadowOpacity: 0.18, shadowRadius: 20, shadowO
 
 ## Motion
 
-| Interaction              | Duration   | Detail                                         |
-| ------------------------ | ---------- | ---------------------------------------------- |
-| Screen enter             | 280 ms     | opacity 0→1, translateY 8→0, ease-out          |
-| Staggered items          | 320 ms     | same, +80 ms delay per group                   |
-| Button press             | 150 ms     | scale 1→0.98 (round 0.94)                       |
-| Field focus              | 200 ms     | border + halo, chip color + rotate             |
-| Error / alert appear     | 200–320 ms | fade + translateY −16→0                        |
-| Chip / tab select        | 200 ms     | background + border                            |
-| Bar growth (B6)          | 400 ms     | height 0→value, ease-out                       |
-| Spinner                  | 800 ms     | rotate 360, linear, loop                       |
-| Logo pulse               | 3200 ms    | scale 1→1.05→1, loop                           |
-| "Monitoring active" rings| 2800 ms    | scale 0.7→1.35, opacity 0.7→0, two rings 1400 ms apart |
+| Interaction               | Duration   | Detail                                                 |
+| ------------------------- | ---------- | ------------------------------------------------------ |
+| Screen enter              | 280 ms     | opacity 0→1, translateY 8→0, ease-out                  |
+| Staggered items           | 320 ms     | same, +80 ms delay per group                           |
+| Button press              | 150 ms     | scale 1→0.98 (round 0.94)                              |
+| Field focus               | 200 ms     | border + halo, chip color + rotate                     |
+| Error / alert appear      | 200–320 ms | fade + translateY −16→0                                |
+| Chip / tab select         | 200 ms     | background + border                                    |
+| Bar growth (B6)           | 400 ms     | height 0→value, ease-out                               |
+| Spinner                   | 800 ms     | rotate 360, linear, loop                               |
+| Logo pulse                | 3200 ms    | scale 1→1.05→1, loop                                   |
+| "Monitoring active" rings | 2800 ms    | scale 0.7→1.35, opacity 0.7→0, two rings 1400 ms apart |
 
 All motion stops when the system "reduce motion" setting is on.
 
@@ -147,13 +147,13 @@ All motion stops when the system "reduce motion" setting is on.
 No new native libraries are added in Sprint 1, so no extra rebuilds and no risk to the
 working auth code.
 
-| Topic            | Design says     | We use                                   |
-| ---------------- | --------------- | ---------------------------------------- |
-| Icons            | Lucide          | Feather from `@expo/vector-icons` (same style, already installed) |
-| Animation        | Reanimated      | React Native `Animated` (built in)       |
-| Nav bar          | expo-blur       | `surface` at 78% opacity, no blur        |
-| Logo             | SVG             | PNG image, pulse with `Animated`         |
-| Background glow  | radial gradient | PNG background image                     |
+| Topic           | Design says     | We use                                                            |
+| --------------- | --------------- | ----------------------------------------------------------------- |
+| Icons           | Lucide          | Feather from `@expo/vector-icons` (same style, already installed) |
+| Animation       | Reanimated      | React Native `Animated` (built in)                                |
+| Nav bar         | expo-blur       | `surface` at 78% opacity, no blur                                 |
+| Logo            | SVG             | PNG image, pulse with `Animated`                                  |
+| Background glow | radial gradient | PNG background image                                              |
 
 ## Rules for implementation
 
