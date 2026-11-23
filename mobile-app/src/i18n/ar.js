@@ -187,9 +187,18 @@ const ar = {
     minutes: 'د',
   },
 
-  // C2 / C3 / C4 — Caregiver alerts. Phase 3 placeholder; completed in Phase D3.
+  // C2 / C3 / C4 — Caregiver alerts (FR-13, UC-08)
   caregiverAlerts: {
+    eyebrow: 'حساب مرافق',
     title: 'التنبيهات',
+    patient: 'المريض: {name}',
+    emptyTitle: 'لا توجد تنبيهات',
+    emptyBody: 'ستظهر هنا تنبيهات «حدث صرع محتمل» للمريض المرتبط بك، مع تاريخها ووقتها ومدتها.',
+    notLinkedTitle: 'لم يتم ربط مريض بعد',
+    notLinkedBody: 'ستظهر هنا تنبيهات المريض بعد ربطه بحسابك.',
+    itemTitle: 'حدث صرع محتمل', // NFR-07: never a diagnosis
+    // screen-reader label of one alert card
+    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}',
   },
 
   // Bottom navigation of the patient screens (B1/B2/B4, B5/B6)

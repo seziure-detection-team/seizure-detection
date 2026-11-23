@@ -1,8 +1,9 @@
 // File: profile.test.js
 // Purpose: Unit tests of src/lib/profile.js with a mocked Supabase client: the name comes
-// from the session metadata first, the profile row only as a fallback; error mapping.
+// from the session metadata first, the profile row only as a fallback; the caregiver's
+// linked patient (UC-08); error mapping.
 
-import { firstName, getOwnFullName } from '../src/lib/profile';
+import { firstName, getLinkedPatient, getOwnFullName } from '../src/lib/profile';
 import { supabase } from '../src/lib/supabase';
 
 jest.mock('../src/lib/supabase', () => ({
@@ -68,5 +69,66 @@ describe('firstName', () => {
     expect(firstName('سارة أحمد')).toBe('سارة');
     expect(firstName('   ')).toBeNull();
     expect(firstName(null)).toBeNull();
+  });
+});
+
+describe('getLinkedPatient (UC-08)', () => {
+  // from(table).select(...).eq(...).maybeSingle() → results[table]; records calls per table
+  const mockTables = (results) => {
+    const calls = {};
+    supabase.from.mockImplementation((table) => {
+      const eq = jest.fn(() => ({ maybeSingle: jest.fn().mockResolvedValue(results[table]) }));
+      const select = jest.fn(() => ({ eq }));
+      calls[table] = { select, eq };
+      return { select };
+    });
+    return calls;
+  };
+
+  beforeEach(() => {
+    supabase.auth.getSession.mockResolvedValue(sessionWith({ id: 'c1', user_metadata: {} }));
+  });
+
+  test('linked: reads the patient row, then the patient name (policy 03)', async () => {
+    const calls = mockTables({
+      patient: { data: { patient_id: 'p1' }, error: null },
+      profile: { data: { full_name: 'سارة أحمد' }, error: null },
+    });
+    await expect(getLinkedPatient()).resolves.toEqual({
+      ok: true,
+      patient: { name: 'سارة أحمد' },
+    });
+    expect(calls.patient.select).toHaveBeenCalledWith('patient_id');
+    expect(calls.patient.eq).toHaveBeenCalledWith('caregiver_id', 'c1');
+    expect(calls.profile.select).toHaveBeenCalledWith('full_name');
+    expect(calls.profile.eq).toHaveBeenCalledWith('user_id', 'p1');
+  });
+
+  test('no linked patient: patient is null and the profile is not queried (C4, 1a)', async () => {
+    mockTables({ patient: { data: null, error: null } });
+    await expect(getLinkedPatient()).resolves.toEqual({ ok: true, patient: null });
+    expect(supabase.from).toHaveBeenCalledTimes(1);
+  });
+
+  test('linked but the name is unreadable (e.g. policy 03 missing) is an error (D3-a)', async () => {
+    mockTables({
+      patient: { data: { patient_id: 'p1' }, error: null },
+      profile: { data: null, error: null },
+    });
+    await expect(getLinkedPatient()).resolves.toEqual({ ok: false, kind: 'server' });
+  });
+
+  test.each([
+    ['network', { message: 'Network request failed' }],
+    ['server', { code: '42501', message: 'permission denied' }],
+  ])('maps a failed patient query to "%s" (1c)', async (kind, error) => {
+    mockTables({ patient: { data: null, error } });
+    await expect(getLinkedPatient()).resolves.toEqual({ ok: false, kind });
+  });
+
+  test('no session is an error, without any query', async () => {
+    supabase.auth.getSession.mockResolvedValue(sessionWith(null));
+    await expect(getLinkedPatient()).resolves.toEqual({ ok: false, kind: 'server' });
+    expect(supabase.from).not.toHaveBeenCalled();
   });
 });

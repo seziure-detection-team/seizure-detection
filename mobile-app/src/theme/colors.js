@@ -31,7 +31,6 @@ const colors = {
   onWarningSoft: '#6B3F00', // text on amberBg / warningSoft (7.5:1)
 
   // Phase B tokens
-  surfaceGlass: '#FFFDF9C7', // surface at 78% opacity: bottom nav (no blur, Sprint 1 decision)
   neutral: '#5E5762', // neutral badge text and dot, e.g. "غير متصل" (5.61:1 on neutralSoft)
   neutralSoft: '#ECE6DC', // neutral badge background
 };

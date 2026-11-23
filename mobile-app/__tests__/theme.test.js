@@ -28,7 +28,6 @@ test('color tokens match the design specification', () => {
     success: '#2B7350',
     successSoft: '#E1EFE6',
     onWarningSoft: '#6B3F00',
-    surfaceGlass: '#FFFDF9C7',
     neutral: '#5E5762',
     neutralSoft: '#ECE6DC',
   });

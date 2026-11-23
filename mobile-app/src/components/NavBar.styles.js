@@ -13,7 +13,8 @@ export default StyleSheet.create({
     padding: spacing.sm,
     gap: spacing.sm,
     borderRadius: sizes.navHeight / 2,
-    backgroundColor: colors.surfaceGlass,
+    // Opaque, so content scrolling under the floating bar never shows through its labels
+    backgroundColor: colors.surface,
     ...shadows.md,
   },
   item: {

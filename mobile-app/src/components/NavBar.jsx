@@ -1,6 +1,6 @@
 // File: NavBar.jsx
 // Purpose: Floating bottom navigation of the patient screens (Yaqz v2: Home / History).
-// surface at 78% opacity, no blur (Sprint 1 decision). The active item has a primarySoft
+// Opaque surface with a shadow, no blur (Sprint 1 decision). The active item has a primarySoft
 // pill. Exposed to screen readers as a tab list. Vertical placement is set by the screen.
 // items: [{ key, label, icon (Feather name) }]
 

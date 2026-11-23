@@ -122,7 +122,7 @@ button: { shadowColor: '#17141C', shadowOpacity: 0.18, shadowRadius: 20, shadowO
 - **Badge:** height 28, padding 12, dot 7, text 13/600. Always color + dot + text.
 - **Alert** (connection lost): radius 20, padding 16, `warningSoft` with `onWarningSoft` text.
 - **Bottom nav** (patient: Home / History): height 72, inset 16, radius 36,
-  `surface` at 78% opacity (no blur, see decisions).
+  opaque `surface` with `shadow.md` (no blur, see decisions).
 - **Logout button** on every patient and caregiver screen (UC-02).
 
 ## Motion
@@ -151,7 +151,7 @@ working auth code.
 | --------------- | --------------- | ----------------------------------------------------------------- |
 | Icons           | Lucide          | Feather from `@expo/vector-icons` (same style, already installed) |
 | Animation       | Reanimated      | React Native `Animated` (built in)                                |
-| Nav bar         | expo-blur       | `surface` at 78% opacity, no blur                                 |
+| Nav bar         | expo-blur       | opaque `surface` with shadow, no blur (content scrolls under it)  |
 | Logo            | SVG             | PNG image, pulse with `Animated`                                  |
 | Background glow | radial gradient | PNG background image                                              |
 
