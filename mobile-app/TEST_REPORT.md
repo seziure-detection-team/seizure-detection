@@ -183,3 +183,94 @@ no account is created during the review and the only email needed is the reset e
 6. Login as the caregiver → C2 with the real name of the linked patient. Logout → A1.
 7. Password reset: A4 → A5 → email link opened on the emulator → A6 → new password → A1 with
    the success message → login with the new password.
+
+## Branch 2 – screens use the database
+
+Branch `feat/screens-use-database`: History (B5), Patterns (B6), Event detail (B7) and the
+caregiver Alerts (C2/C3) read from Supabase through `src/lib/events.js` and `src/lib/alerts.js`,
+and B7 saves the label in `seizure_event` (FR-17, UC-10). `src/mocks/` is removed. The rows are
+still the test data of `database/test-data/01_sample_events_and_alerts.sql`, so the
+"بيانات تجريبية" badge stays. B1/B2/B4 (wristband simulation, "محاكاة") are unchanged.
+
+### Branch 2 manual tests
+
+Results are recorded as reported; no result is assumed.
+
+**Setup (before the tests):**
+
+- A Supabase project with `database/supabase/01`–`03` applied, and these verified accounts:
+  patient **P1**, a second patient **P2** with no events, caregiver **C1** linked to P1
+  (`public.patient.caregiver_id`, as in the team guide), and caregiver **C2** not linked to
+  any patient.
+- Run `database/test-data/01_sample_events_and_alerts.sql` for P1 (edit only `patient_email`).
+  Running it again later resets the 8 test labels.
+- Set the emulator time zone to **Asia/Riyadh** (Settings → System → Date & time → turn off
+  automatic time zone → Riyadh). The test data is stored in Riyadh time and the app shows times
+  in the device's time zone, so the expected times below hold only in that time zone.
+- App: the local development build of this branch on the emulator, with Metro running
+  (`npm start` in `mobile-app`; no rebuild is needed for this branch).
+- Restart Metro with `--clear` after switching branches (for example
+  `npx expo start --dev-client --clear`), so the app does not run an old bundle.
+
+**Run conditions (as reported):** my first manual tests ran on an old bundle, because Metro was
+started before the branch was created. Labels reverted after logout and the database did not
+change. I restarted Metro with `npx expo start --dev-client --clear` on
+`feat/screens-use-database`, reopened the app, and re-ran all tests below on the new bundle.
+Emulator time zone: Asia/Riyadh. Only the results of the re-run are recorded.
+
+| #      | Test                        | Steps                                                                                                                                    | Expected result                                                                                                                                                                                                        | Result                                                                                 |
+| ------ | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| BR2-1  | B5 shows the 8 test events  | Log in as P1 → History tab                                                                                                               | A loading indicator, then 8 events newest first. First: "22 نوفمبر 2026", "2:14 ص", "1:12 د", "بانتظار المراجعة". Last: "13 أكتوبر 2026", "9:48 م", "0:41 د", "نوبة مؤكدة". Badge "بيانات تجريبية" shown               | PASS (result 1)                                                                        |
+| BR2-2  | B7 opens the real event     | On B5, tap the first event                                                                                                               | B7 "حدث صرع محتمل" with date "22 نوفمبر 2026", start time "2:14 ص", duration "1:12 د", badge "بانتظار المراجعة"; no chip selected                                                                                      | PASS (result 2)                                                                        |
+| BR2-3  | Label saved (UC-10 3, 4)    | On B7 of the first event, tap "نوبة مؤكدة" → back                                                                                        | The chip becomes selected and the badge shows "نوبة مؤكدة"; on B5 the first event shows "نوبة مؤكدة"                                                                                                                   | PASS (result 2; labels as in result 2)                                                 |
+| BR2-4  | Label kept after logout     | After BR2-3: Home → logout → log in as P1 → History                                                                                      | The first event still shows "نوبة مؤكدة" (before Branch 2 it was reset on logout)                                                                                                                                      | PASS (result 3)                                                                        |
+| BR2-5  | Label in the database       | Supabase → Table Editor → `seizure_event`, rows of P1                                                                                    | The row with `start_time` 2026-11-22 02:14 Riyadh time (shown as `2026-11-21 23:14:00+00` in UTC) has `label` = `confirmed_seizure`; the other 7 labels are unchanged                                                  | PASS (result 2; labels as in result 2)                                                 |
+| BR2-6  | Label changed (UC-10 2b)    | Open the first event again → tap "إنذار خاطئ" → back                                                                                     | "إنذار خاطئ" selected on B7 and shown on B5; in `seizure_event` the label is `false_alarm`                                                                                                                             | PASS (result 2)                                                                        |
+| BR2-7  | Failed save keeps the label | Open the first event → turn on airplane mode on the emulator → tap "نوبة مؤكدة" → wait → turn airplane mode off → tap "نوبة مؤكدة" again | Offline: after up to about 15 s, the error banner "تعذّر الاتصال بالخادم. تحقّق من اتصالك بالإنترنت ثم حاول مرة أخرى." and the previous label ("إنذار خاطئ") stays. Online: the label is saved and the banner disappears | NOT RUN (covered by automated tests only)                                              |
+| BR2-8  | B6 matches the events       | As P1, History → "الأنماط"                                                                                                               | 6 bars for the weeks 12 أكت, 19 أكت, 26 أكت, 2 نوف, 9 نوف, 16 نوف with 1, 0, 2, 1, 2, 2 events; the last bar highlighted                                                                                               | PASS (result 4)                                                                        |
+| BR2-9  | B5 load error and retry     | Turn on airplane mode → Home → History → wait → turn airplane mode off → tap "إعادة المحاولة"                                            | Offline: the network error banner and "إعادة المحاولة" (UC-09 1b). After retry: the 8 events                                                                                                                           | NOT RUN (covered by automated tests only)                                              |
+| BR2-10 | Another patient sees none   | Log out → log in as P2 → History, then "الأنماط"                                                                                         | The empty state "لا توجد أحداث مسجلة" on both tabs; none of P1's events (NFR-05)                                                                                                                                       | NOT RUN (no P2 account; see below)                                                     |
+| BR2-11 | Linked caregiver: C2        | Log out → log in as C1                                                                                                                   | The patient chip with P1's real name and 5 alerts newest first. First (highlighted): "22 نوفمبر 2026", "2:14 ص", "1:12 د". Last: "2 نوفمبر 2026", "3:51 ص", "1:26 د"                                                   | PASS (result 5)                                                                        |
+| BR2-12 | Unlinked caregiver: C4      | Log out → log in as C2                                                                                                                   | "لم يتم ربط مريض بعد" (UC-08 1a); no alerts                                                                                                                                                                            | PASS (result 6; run with C1 after unlinking it in SQL, not with a separate C2 account) |
+| BR2-13 | Wristband simulation        | Log in as P1 → "ربط السوار" → tap the wristband card → "إعادة الاتصال"                                                                   | B1 → B2 (badge "محاكاة") → B4 warning → B2, as in test 17                                                                                                                                                              | NOT RUN (covered by automated tests only)                                              |
+
+**Reported results (as written by the tester):**
+
+1. History (B5, FR-14): PASS. P1 sees the 8 database events, newest first (22 Nov 2026 2:14 ص
+   1:12 د to 13 Oct 2026), with their labels and the "بيانات تجريبية" badge.
+2. Label save (B7, FR-17, UC-10): PASS. I set 22 Nov to "إنذار خاطئ" and the other events to
+   "نوبة مؤكدة". After refreshing the seizure_event table in Supabase, the labels match exactly
+   (2026-11-21 23:14 UTC row = false_alarm, all others = confirmed_seizure). History showed the
+   new labels after returning from B7.
+3. Label persistence after logout/login: PASS. Logged out and back in as P1; History shows the
+   same labels, matching the table.
+4. Patterns (B6, FR-15): PASS. Weekly chart: 12 أكت 1, 19 أكت 0, 26 أكت 2, 2 نوف 1, 9 نوف 2,
+   16 نوف 2, with the badge.
+5. Linked caregiver (C2 screen) (FR-13, UC-08): PASS. C1 sees the patient chip "P1's real name", the badge
+   and 5 alerts from the database, newest first: 22 Nov 2:14 ص 1:12 د, 19 Nov 11:40 م 0:48 د,
+   15 Nov 4:05 ص 2:03 د, 9 Nov 7:22 م 0:35 د, 2 Nov 3:51 ص 1:26 د.
+6. Unlinked caregiver C4 (UC-08 1a): PASS. After setting patient.caregiver_id to null in SQL, C1
+   saw "لم يتم ربط مريض بعد" with no alerts. The link was then restored.
+
+Not run:
+
+- Second patient account (P2) tests: I do not have a third email that is a member of my
+  Supabase organization. RLS isolation is covered by the database policies and the automated
+  tests.
+- Any other BR2 test not listed above (for example, forced network errors): NOT RUN, covered by
+  automated tests only.
+
+### Branch 2 automated tests
+
+Run on 2026-11-24 (Node.js 22.20.0) on the working tree of this branch, before commit:
+
+| Command                | Result                                                                                                                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `npx jest --runInBand` | Runs 1 and 2: 17 of 17 suites, 219 of 219 tests pass                                                                    |
+| `npx jest --runInBand` | Run 3: 218 of 219; `patientHome.test.js` first test exceeded the 5 s timeout; that suite then passed 5 of 5 times alone |
+| `npm run lint`         | No errors or warnings                                                                                                   |
+| `npm run format:check` | All files formatted                                                                                                     |
+
+Changed suites: `history.test.js` 10 tests (was 5), `eventDetail.test.js` 11 (was 4),
+`caregiverAlerts.test.js` 8 (was 5); `patterns.test.js` 3 (fixture moved into the test);
+`eventLabels.test.js` removed with `src/mocks/`.
