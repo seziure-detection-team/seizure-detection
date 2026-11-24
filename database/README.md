@@ -7,7 +7,8 @@ Supabase (PostgreSQL) table definitions and row-level security policies.
 They are **not** migrations and must never be run on a production project.
 
 `test-data/01_sample_events_and_alerts.sql` adds 8 sample seizure events and 5 caregiver
-alerts for one patient account, matching the sample data of the mobile app. To run it:
+alerts for one patient account; the mobile app's History, Patterns, Event detail and
+caregiver Alerts screens read them from the database. To run it:
 
 1. Make sure the SQL files in `supabase/` are applied and the patient account is registered
    and verified.

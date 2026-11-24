@@ -7,8 +7,7 @@
 // The greeting uses the patient's real name (session metadata, src/lib/profile.js).
 // The logout button (UC-02) is in the header. The wristband state is local: this screen
 // stays at the bottom of the patient stack, so it survives a visit to History and is
-// cleared on logout, when the route guard removes the screen. On that unmount the sample
-// event labels set on B7 are cleared too (approved decision D-g).
+// cleared on logout, when the route guard removes the screen.
 
 import { useEffect, useRef, useState } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
@@ -25,7 +24,6 @@ import ScreenHeader from '../../src/components/ScreenHeader';
 import WristbandHero from '../../src/components/WristbandHero';
 import ar from '../../src/i18n/ar';
 import { firstName, getOwnFullName } from '../../src/lib/profile';
-import { resetEventLabels } from '../../src/mocks/eventLabels';
 import styles from '../../src/styles/patientHome.styles';
 import { colors } from '../../src/theme';
 
@@ -58,14 +56,8 @@ export default function PatientHomeScreen() {
     };
   }, []);
 
-  // On unmount (logout): stop a pending simulated connect, clear the sample labels (D-g)
-  useEffect(
-    () => () => {
-      clearTimeout(connectTimer.current);
-      resetEventLabels();
-    },
-    [],
-  );
+  // On unmount (logout): stop a pending simulated connect
+  useEffect(() => () => clearTimeout(connectTimer.current), []);
 
   const simulateConnect = () => {
     setConnecting(true);

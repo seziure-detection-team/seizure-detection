@@ -1,9 +1,11 @@
 // File: alerts.jsx
-// Purpose: Caregiver Alerts (FR-13, UC-08). The linked patient is real (src/lib/profile.js,
-// RLS policy 03); the alerts are SAMPLE DATA in Sprint 1 (src/mocks/alerts.js), labelled
-// "بيانات تجريبية". States:
+// Purpose: Caregiver Alerts (FR-13, UC-08). The linked patient (src/lib/profile.js, RLS
+// policy 03) and the alerts (src/lib/alerts.js, alert table) are read from the database; the
+// alerts are still test data, labelled "بيانات تجريبية". The alerts are loaded only when a
+// patient is linked. States:
 //   - loading:     first load and each retry
-//   - error:       query failed or the patient's name is unreadable (1c, decision D3-a) → retry
+//   - error:       a query failed or the patient's name is unreadable (1c, decision D3-a)
+//                  → retry (loads the patient and the alerts again)
 //   - C4:          no linked patient (1a)
 //   - C3:          linked, no alerts (1b)
 //   - C2:          linked, alerts newest first; the newest is highlighted
@@ -23,15 +25,22 @@ import SampleDataBadge from '../../src/components/SampleDataBadge';
 import Screen from '../../src/components/Screen';
 import ScreenHeader from '../../src/components/ScreenHeader';
 import ar from '../../src/i18n/ar';
+import { listMyAlerts } from '../../src/lib/alerts';
 import { formatDate, formatDuration, formatTime } from '../../src/lib/format';
 import { getLinkedPatient } from '../../src/lib/profile';
-import { getSampleAlerts } from '../../src/mocks/alerts';
 import styles from '../../src/styles/caregiverAlerts.styles';
 import { colors, sizes } from '../../src/theme';
 
-// Result of getLinkedPatient → screen state
-const toState = (result) =>
-  result.ok ? { status: 'ready', patient: result.patient } : { status: 'error', kind: result.kind };
+// The linked patient, then (only if linked) the alerts → screen state
+async function loadState() {
+  const linked = await getLinkedPatient();
+  if (!linked.ok) return { status: 'error', kind: linked.kind };
+  if (!linked.patient) return { status: 'ready', patient: null, alerts: [] };
+
+  const alerts = await listMyAlerts();
+  if (!alerts.ok) return { status: 'error', kind: alerts.kind };
+  return { status: 'ready', patient: linked.patient, alerts: alerts.data };
+}
 
 // "المريض: سارة أحمد" with the first letter in a round avatar (C2 / C3)
 function PatientChip({ name }) {
@@ -87,8 +96,8 @@ export default function CaregiverAlertsScreen() {
 
   useEffect(() => {
     let active = true;
-    getLinkedPatient().then((result) => {
-      if (active) setState(toState(result));
+    loadState().then((next) => {
+      if (active) setState(next);
     });
     return () => {
       active = false;
@@ -97,7 +106,7 @@ export default function CaregiverAlertsScreen() {
 
   const retry = async () => {
     setState({ status: 'loading' });
-    setState(toState(await getLinkedPatient()));
+    setState(await loadState());
   };
 
   let content;
@@ -126,7 +135,7 @@ export default function CaregiverAlertsScreen() {
       </View>
     );
   } else {
-    const alerts = getSampleAlerts();
+    const { alerts } = state;
     content = (
       <>
         <PatientChip name={state.patient.name} />

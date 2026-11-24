@@ -3,15 +3,23 @@
 //   - السجل (B5, FR-14): events newest first with date, time, duration and label;
 //     tapping an event opens its detail (B7)
 //   - الأنماط (B6, FR-15): number of events per week for the last 6 weeks
-// SAMPLE DATA in Sprint 1 (src/mocks/events.js), labelled "بيانات تجريبية". Labels changed
-// on B7 show here through the in-memory label store (UC-10 step 4).
+// The events are read from the seizure_event table (src/lib/events.js); both tabs use the
+// same list. They are still test data, labelled "بيانات تجريبية". States:
+//   - loading:  first load and each retry
+//   - error:    query failed (UC-09 1b) → retry
+//   - empty:    no events (UC-09 1a)
+//   - ready:    the list (B5) or the weekly chart (B6)
+// The list is reloaded each time the screen comes into view, so a label saved on B7 shows
+// here on return (UC-10 step 4); during that reload the current list stays on screen.
 // No logout button here (approved: B5/B6 follow the design; logout is one tap away on Home).
 
-import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useCallback, useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 
+import Banner from '../../src/components/Banner';
+import Button from '../../src/components/Button';
 import Card from '../../src/components/Card';
 import EmptyState from '../../src/components/EmptyState';
 import EventStatusBadge from '../../src/components/EventStatusBadge';
@@ -23,9 +31,8 @@ import TwoToneTitle from '../../src/components/TwoToneTitle';
 import WeeklyBarChart from '../../src/components/WeeklyBarChart';
 import ar from '../../src/i18n/ar';
 import { formatDate, formatDuration, formatTime, formatWeekLabel } from '../../src/lib/format';
+import { listMyEvents } from '../../src/lib/events';
 import { weeklyCounts } from '../../src/lib/patterns';
-import { labelFor, useLabelOverrides } from '../../src/mocks/eventLabels';
-import { getSampleEvents } from '../../src/mocks/events';
 import styles from '../../src/styles/history.styles';
 import { colors, sizes } from '../../src/theme';
 
@@ -33,6 +40,10 @@ const TABS = [
   { key: 'log', label: ar.history.tabLog },
   { key: 'patterns', label: ar.history.tabPatterns },
 ];
+
+// Result of listMyEvents → screen state
+const toState = (result) =>
+  result.ok ? { status: 'ready', events: result.data } : { status: 'error', kind: result.kind };
 
 // One event card of the B5 list
 function EventItem({ event, label, onPress }) {
@@ -75,9 +86,33 @@ function EventItem({ event, label, onPress }) {
 export default function HistoryScreen() {
   const router = useRouter();
   const [tab, setTab] = useState('log');
-  const overrides = useLabelOverrides();
-  const events = getSampleEvents();
+  const [state, setState] = useState({ status: 'loading' });
+  // Only the newest request may update the screen (a retry, or leaving the screen, makes
+  // older ones stale)
+  const requestId = useRef(0);
 
+  const load = useCallback(async () => {
+    requestId.current += 1;
+    const id = requestId.current;
+    const result = await listMyEvents();
+    if (id === requestId.current) setState(toState(result));
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      load();
+      return () => {
+        requestId.current += 1; // screen left: ignore the pending result
+      };
+    }, [load]),
+  );
+
+  const retry = () => {
+    setState({ status: 'loading' });
+    load();
+  };
+
+  const events = state.status === 'ready' ? state.events : [];
   const weeks = weeklyCounts(events);
   const chartData = weeks.map((week, index) => ({
     key: String(week.weekStart.getTime()),
@@ -89,7 +124,21 @@ export default function HistoryScreen() {
   const openEvent = (id) => router.push({ pathname: '/event/[id]', params: { id } });
 
   let content;
-  if (events.length === 0) {
+  if (state.status === 'loading') {
+    content = (
+      <View style={styles.empty}>
+        <ActivityIndicator color={colors.primary} accessibilityLabel={ar.common.loading} />
+      </View>
+    );
+  } else if (state.status === 'error') {
+    // UC-09 1b: retrieval failure
+    content = (
+      <>
+        <Banner variant="error" message={ar.messages[state.kind] ?? ar.messages.server} />
+        <Button title={ar.common.retry} onPress={retry} />
+      </>
+    );
+  } else if (events.length === 0) {
     // UC-09 1a: no events recorded
     content = (
       <View style={styles.empty}>
@@ -103,7 +152,7 @@ export default function HistoryScreen() {
           <EventItem
             key={event.id}
             event={event}
-            label={labelFor(overrides, event)}
+            label={event.label}
             onPress={() => openEvent(event.id)}
           />
         ))}
