@@ -274,3 +274,48 @@ Run on 2026-11-24 (Node.js 22.20.0) on the working tree of this branch, before c
 Changed suites: `history.test.js` 10 tests (was 5), `eventDetail.test.js` 11 (was 4),
 `caregiverAlerts.test.js` 8 (was 5); `patterns.test.js` 3 (fixture moved into the test);
 `eventLabels.test.js` removed with `src/mocks/`.
+
+## Branch 3 – caregiver alert status
+
+Branch `feat/caregiver-alert-status`: each alert card on the caregiver Alerts screen (C2) shows
+the status of its event (the label set by the patient on B7, FR-17) with the same badge as B5,
+read-only: the cards are not pressable and open nothing. `src/lib/alerts.js` also reads
+`seizure_event.label`; no database or policy change. C2 reloads when it comes into view, when
+the app returns to the foreground, and on pull-to-refresh (every state except loading, C4
+included). A failed reload shows the error with retry.
+
+### Branch 3 manual tests
+
+Results are recorded as reported; no result is assumed.
+
+**Run conditions (as reported):** 2026-11-25, Android emulator, development build, Metro
+restarted with `--clear` on this branch, against the tester's own test Supabase project, signed
+in as a caregiver linked to a patient with alerts. Labels were changed directly in the Supabase
+Table Editor (`seizure_event.label`) to stand in for the patient's change on B7.
+
+| #     | Test                        | Steps                                                                        | Expected result                                                                                 | Result                                                                                    |
+| ----- | --------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| BR3-1 | Status badge on each card   | Log in as the linked caregiver → C2                                          | Every card shows its status badge under the date, time and duration line; counts match the data | PASS                                                                                      |
+| BR3-2 | Cards are read-only         | Tap a card                                                                   | Nothing happens; no chevron                                                                     | PASS                                                                                      |
+| BR3-3 | Pull-to-refresh             | With C2 open, change an event's label in the Table Editor → pull down on C2  | The spinner shows, the list stays visible, the badge shows the new label                        | PASS                                                                                      |
+| BR3-4 | Reload on return to the app | Change the same event's label in the Table Editor → Home → reopen the app    | The badge shows the new label without a pull                                                    | PASS (updated by itself after about 2 s); the label was then set back to `pending_review` |
+| BR3-5 | Failed pull and retry       | Turn on airplane mode → pull → turn airplane mode off → tap "إعادة المحاولة" | Offline: the error with retry. After retry: the list                                            | PASS                                                                                      |
+| BR3-6 | Logout from C2              | Tap the logout button on C2                                                  | A1 opens                                                                                        | PASS                                                                                      |
+| BR3-7 | Screen reader reads status  | TalkBack on → focus an alert card                                            | The card is read with its status at the end                                                     | NOT RUN (covered by automated tests only)                                                 |
+| BR3-8 | Pull on C4                  | Unlinked caregiver on C4 → link the accounts in SQL → pull                   | C2 with the patient's alerts, without logging out                                               | NOT RUN (covered by automated tests only)                                                 |
+
+### Branch 3 automated tests
+
+Run on 2026-11-25 (Node.js 26.13.1) on the working tree of this branch, before commit:
+
+| Command                | Result                                               |
+| ---------------------- | ---------------------------------------------------- |
+| `npm test`             | Runs 1 and 2: 17 of 17 suites, 227 of 227 tests pass |
+| `npm run lint`         | No errors or warnings                                |
+| `npm run format:check` | All files formatted                                  |
+
+Changed suites: `caregiverAlerts.test.js` 16 tests (was 8): status badges and screen-reader
+status, read-only cards, reload on focus and on return to the foreground, pull-to-refresh
+(spinner in theme colours, list kept, failed pull, C4), no pull while loading, an older
+overlapping reload ignored, the foreground listener removed on unmount. `alerts.test.js` 7 tests
+(count unchanged; the label is now part of the mapping).
