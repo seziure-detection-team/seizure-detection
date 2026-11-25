@@ -8,18 +8,26 @@
 //                  → retry (loads the patient and the alerts again)
 //   - C4:          no linked patient (1a)
 //   - C3:          linked, no alerts (1b)
-//   - C2:          linked, alerts newest first; the newest is highlighted
+//   - C2:          linked, alerts newest first; the newest is highlighted. Each card shows the
+//                  event's status badge (the patient's label, FR-17) read-only: the cards are
+//                  not pressable and open nothing.
+// The list is reloaded when the screen comes into view, when the app returns to the
+// foreground, and on pull-to-refresh (every state except loading), so a label changed by the
+// patient or a new alert shows. During a reload the current content stays on screen; a failed
+// reload shows the error with retry. Only the newest request may update the screen.
 // The header with the logout button (UC-02) is shown in every state.
 // C1 (push notification) is not part of Sprint 1.
 
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, RefreshControl, Text, View } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 
 import Banner from '../../src/components/Banner';
 import Button from '../../src/components/Button';
 import Card from '../../src/components/Card';
 import EmptyState from '../../src/components/EmptyState';
+import EventStatusBadge from '../../src/components/EventStatusBadge';
 import LogoutButton from '../../src/components/LogoutButton';
 import SampleDataBadge from '../../src/components/SampleDataBadge';
 import Screen from '../../src/components/Screen';
@@ -54,11 +62,13 @@ function PatientChip({ name }) {
   );
 }
 
-// One alert card; `newest` highlights the most recent alert (C2)
+// One alert card (read-only); `newest` highlights the most recent alert (C2)
 function AlertItem({ alert, newest }) {
   const date = formatDate(alert.startTime);
   const time = formatTime(alert.startTime);
   const duration = formatDuration(alert.durationSec);
+  // Same fallback as EventStatusBadge for an unknown label
+  const status = ar.eventLabels[alert.label] ?? ar.eventLabels.pending_review;
 
   return (
     <Card
@@ -67,7 +77,8 @@ function AlertItem({ alert, newest }) {
       accessibilityLabel={ar.caregiverAlerts.itemLabel
         .replace('{date}', date)
         .replace('{time}', time)
-        .replace('{duration}', duration)}
+        .replace('{duration}', duration)
+        .replace('{status}', status)}
     >
       <View style={[styles.itemChip, newest ? styles.itemChipNewest : styles.itemChipNormal]}>
         <Feather
@@ -86,6 +97,7 @@ function AlertItem({ alert, newest }) {
             <Text style={styles.itemMetaText}>{duration}</Text>
           </View>
         </View>
+        <EventStatusBadge label={alert.label} style={styles.itemBadge} />
       </View>
     </Card>
   );
@@ -93,20 +105,45 @@ function AlertItem({ alert, newest }) {
 
 export default function CaregiverAlertsScreen() {
   const [state, setState] = useState({ status: 'loading' });
+  const [refreshing, setRefreshing] = useState(false);
+  // Only the newest request may update the screen (a retry, a reload, or leaving the screen
+  // makes older ones stale)
+  const requestId = useRef(0);
 
-  useEffect(() => {
-    let active = true;
-    loadState().then((next) => {
-      if (active) setState(next);
-    });
-    return () => {
-      active = false;
-    };
+  const load = useCallback(async () => {
+    requestId.current += 1;
+    const id = requestId.current;
+    const next = await loadState();
+    if (id === requestId.current) setState(next);
   }, []);
 
-  const retry = async () => {
+  // Screen comes into view (first open after login or a cold start)
+  useFocusEffect(
+    useCallback(() => {
+      load();
+      return () => {
+        requestId.current += 1; // screen left (e.g. logout): ignore the pending result
+      };
+    }, [load]),
+  );
+
+  // App returns to the foreground; the listener is removed on unmount
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (next) => {
+      if (next === 'active') load();
+    });
+    return () => subscription.remove();
+  }, [load]);
+
+  const retry = () => {
     setState({ status: 'loading' });
-    setState(await loadState());
+    load();
+  };
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await load();
+    setRefreshing(false);
   };
 
   let content;
@@ -161,8 +198,19 @@ export default function CaregiverAlertsScreen() {
     );
   }
 
+  // Pull-to-refresh in every state except loading (C4 included: a new link then shows C2)
+  const refreshControl =
+    state.status === 'loading' ? undefined : (
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={refresh}
+        colors={[colors.primary]}
+        progressBackgroundColor={colors.surface}
+      />
+    );
+
   return (
-    <Screen>
+    <Screen refreshControl={refreshControl}>
       <ScreenHeader
         eyebrow={ar.caregiverAlerts.eyebrow}
         title={ar.caregiverAlerts.title}

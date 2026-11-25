@@ -1,11 +1,12 @@
 // File: alerts.js
-// Purpose: The caregiver's alerts from the alert table, with the start time and duration of
-// each alert's event, for the caregiver Alerts screen C2/C3 (FR-13, UC-08). Screens call this
-// function; they never call Supabase directly.
+// Purpose: The caregiver's alerts from the alert table, with the start time, duration and
+// label (FR-17, set by the patient; shown read-only) of each alert's event, for the caregiver
+// Alerts screen C2/C3 (FR-13, UC-08). Screens call this function; they never call Supabase
+// directly.
 // RLS (NFR-05): a caregiver reads only the alerts of their linked patient, and only the events
 // that have one of their alerts; the query therefore needs no filter of its own.
 // Alerts are returned in the shape the screen already uses with the sample data:
-//   { id, eventId, startTime: Date, durationSec }, newest event first.
+//   { id, eventId, startTime: Date, durationSec, label }, newest event first.
 // Returns { ok: true, data } or { ok: false, kind } where kind is 'network' or 'server'. An
 // alert whose event cannot be read is 'server', so the problem is visible instead of a
 // silently shorter list (as approved decision D3-a). Personal data are never logged.
@@ -51,7 +52,9 @@ function classifyError(error) {
  */
 export async function listMyAlerts() {
   const { data, error } = await call(() =>
-    supabase.from('alert').select('alert_id, event_id, seizure_event(start_time, duration_sec)'),
+    supabase
+      .from('alert')
+      .select('alert_id, event_id, seizure_event(start_time, duration_sec, label)'),
   );
   if (error) return fail(classifyError(error));
 
@@ -63,6 +66,7 @@ export async function listMyAlerts() {
     eventId: row.event_id,
     startTime: new Date(row.seizure_event.start_time),
     durationSec: row.seizure_event.duration_sec,
+    label: row.seizure_event.label,
   }));
   alerts.sort((a, b) => b.startTime - a.startTime);
   return { ok: true, data: alerts };

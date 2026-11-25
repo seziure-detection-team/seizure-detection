@@ -109,4 +109,8 @@ export default StyleSheet.create({
     fontSize: fontSizes.body,
     lineHeight: lineHeights.body,
   },
+  // Read-only status badge under the date/time/duration line (same spacing as B5)
+  itemBadge: {
+    marginTop: spacing.sm,
+  },
 });

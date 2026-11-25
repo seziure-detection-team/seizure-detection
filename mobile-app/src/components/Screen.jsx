@@ -5,6 +5,8 @@
 // A3/A5 buttons), and the screen-enter motion (280 ms fade + slide up; none with reduce motion).
 // `bottomBar` (e.g. the patient NavBar) floats above the bottom edge, outside the scroll
 // view, and the content gets extra bottom padding so nothing stays hidden under it.
+// `refreshControl` (optional, opt-in): a RefreshControl passed to the scroll view for
+// pull-to-refresh (C2); screens that do not pass it are unchanged.
 
 import { useEffect, useState } from 'react';
 import { Animated, Easing, Image, KeyboardAvoidingView, ScrollView, View } from 'react-native';
@@ -17,7 +19,7 @@ import styles from './Screen.styles';
 const glow = require('../../assets/images/background-glow.png');
 
 // centered: vertically centers the body (message screens such as A3 and A5)
-export default function Screen({ children, footer, bottomBar, centered = false }) {
+export default function Screen({ children, footer, bottomBar, refreshControl, centered = false }) {
   const reduceMotion = useReduceMotion();
   const [enter] = useState(() => new Animated.Value(reduceMotion ? 1 : 0));
 
@@ -63,6 +65,7 @@ export default function Screen({ children, footer, bottomBar, centered = false }
             contentContainerStyle={[styles.content, bottomBar && styles.contentWithBottomBar]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
+            refreshControl={refreshControl}
           >
             <Animated.View style={[centered ? styles.bodyCentered : styles.body, enterStyle]}>
               {children}

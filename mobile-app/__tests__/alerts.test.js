@@ -1,7 +1,7 @@
 // File: alerts.test.js
 // Purpose: Unit tests of src/lib/alerts.js with a mocked Supabase client: mapping of alert
-// rows (with their embedded event) to the app shape, newest event first, the unreadable-event
-// case (D3-a), and error mapping (network, timeout, server).
+// rows (with their embedded event and its label) to the app shape, newest event first, the
+// unreadable-event case (D3-a), and error mapping (network, timeout, server).
 
 import { listMyAlerts } from '../src/lib/alerts';
 import { supabase } from '../src/lib/supabase';
@@ -20,10 +20,10 @@ const mockQuery = (result) => {
   return { select };
 };
 
-const alertRow = (alertId, eventId, startTime, durationSec) => ({
+const alertRow = (alertId, eventId, startTime, durationSec, label) => ({
   alert_id: alertId,
   event_id: eventId,
-  seizure_event: { start_time: startTime, duration_sec: durationSec },
+  seizure_event: { start_time: startTime, duration_sec: durationSec, label },
 });
 
 beforeEach(() => {
@@ -37,8 +37,8 @@ afterEach(() => {
 test('maps alerts with their event to the app shape, newest event first (FR-13)', async () => {
   const query = mockQuery({
     data: [
-      alertRow('a2', 'ev2', '2026-11-19T23:40:00+03:00', 48),
-      alertRow('a1', 'ev1', '2026-11-22T02:14:00+03:00', 72),
+      alertRow('a2', 'ev2', '2026-11-19T23:40:00+03:00', 48, 'confirmed_seizure'),
+      alertRow('a1', 'ev1', '2026-11-22T02:14:00+03:00', 72, 'pending_review'),
     ],
     error: null,
   });
@@ -47,13 +47,25 @@ test('maps alerts with their event to the app shape, newest event first (FR-13)'
 
   expect(supabase.from).toHaveBeenCalledWith('alert');
   expect(query.select).toHaveBeenCalledWith(
-    'alert_id, event_id, seizure_event(start_time, duration_sec)',
+    'alert_id, event_id, seizure_event(start_time, duration_sec, label)',
   );
   expect(result).toEqual({
     ok: true,
     data: [
-      { id: 'a1', eventId: 'ev1', startTime: new Date('2026-11-21T23:14:00Z'), durationSec: 72 },
-      { id: 'a2', eventId: 'ev2', startTime: new Date('2026-11-19T20:40:00Z'), durationSec: 48 },
+      {
+        id: 'a1',
+        eventId: 'ev1',
+        startTime: new Date('2026-11-21T23:14:00Z'),
+        durationSec: 72,
+        label: 'pending_review',
+      },
+      {
+        id: 'a2',
+        eventId: 'ev2',
+        startTime: new Date('2026-11-19T20:40:00Z'),
+        durationSec: 48,
+        label: 'confirmed_seizure',
+      },
     ],
   });
   expect(result.data[0].startTime).toBeInstanceOf(Date);
@@ -67,7 +79,7 @@ test('no alerts is an empty list (C3, UC-08 1b)', async () => {
 test('an alert whose event cannot be read is "server" (D3-a)', async () => {
   mockQuery({
     data: [
-      alertRow('a1', 'ev1', '2026-11-22T02:14:00+03:00', 72),
+      alertRow('a1', 'ev1', '2026-11-22T02:14:00+03:00', 72, 'pending_review'),
       { alert_id: 'a2', event_id: 'ev2', seizure_event: null },
     ],
     error: null,

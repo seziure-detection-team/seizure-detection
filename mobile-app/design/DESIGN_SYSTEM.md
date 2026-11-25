@@ -32,8 +32,9 @@ Notes on the images:
 | C4  | `C4-no-linked-patient.png`      | No linked patient                         |
 
 In Sprint 1 only login, registration, password reset and role-based routing are functional.
-The B and C screens show sample data; real data arrives in later sprints (FR-05, FR-13,
-FR-14, FR-15, FR-17).
+B5, B6, B7 and C2/C3 read from Supabase through `src/lib/events.js` and `src/lib/alerts.js`;
+the rows are still test data, labelled "بيانات تجريبية". B1/B2/B4 use a wristband simulation
+("محاكاة").
 
 ## Identity
 
@@ -120,6 +121,11 @@ button: { shadowColor: '#17141C', shadowOpacity: 0.18, shadowRadius: 20, shadowO
 - **Segmented tabs** (History / Patterns): height 44.
 - **Card:** radius 24, padding 16, `shadow.md`.
 - **Badge:** height 28, padding 12, dot 7, text 13/600. Always color + dot + text.
+- **Event status badge** (B5, B7; read-only on C2): tone by label: pending review → warning,
+  confirmed → primary, false alarm → neutral. On C2 it sits under each alert's date / time /
+  duration line; the cards are not pressable (no chevron, no navigation). C2 reloads on
+  focus, on return to the foreground and on pull-to-refresh, so a label changed by the
+  patient shows.
 - **Alert** (connection lost): radius 20, padding 16, `warningSoft` with `onWarningSoft` text.
 - **Bottom nav** (patient: Home / History): height 72, inset 16, radius 36,
   opaque `surface` with `shadow.md` (no blur, see decisions).
