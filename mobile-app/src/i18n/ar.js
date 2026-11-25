@@ -197,8 +197,8 @@ const ar = {
     notLinkedTitle: 'لم يتم ربط مريض بعد',
     notLinkedBody: 'ستظهر هنا تنبيهات المريض بعد ربطه بحسابك.',
     itemTitle: 'حدث صرع محتمل', // NFR-07: never a diagnosis
-    // screen-reader label of one alert card
-    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}',
+    // screen-reader label of one alert card; {status} is the event label (read-only)
+    itemLabel: 'حدث صرع محتمل، {date}، {time}، المدة {duration}، {status}',
   },
 
   // Bottom navigation of the patient screens (B1/B2/B4, B5/B6)
